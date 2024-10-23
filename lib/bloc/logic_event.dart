@@ -8,3 +8,9 @@ class OnDropComponentEvent extends LogicEvent {
 
   OnDropComponentEvent({required this.droppedComponentTitle});
 }
+
+class OnSelectDroppedComponentEvent extends LogicEvent {
+  final String id;
+
+  OnSelectDroppedComponentEvent({required this.id});
+}

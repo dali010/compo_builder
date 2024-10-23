@@ -7,11 +7,21 @@ class WidgetFactory {
       case WidgetType.text:
         return Text('Hello World');
       case WidgetType.button:
-        return ElevatedButton(onPressed: () {}, child: Text('Click Me'));
+        return AbsorbPointer(
+          child: TextButton(
+            onPressed: () {},
+            child: Text('Click Me'),
+            style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.lightGreen),
+                shape: WidgetStateProperty.all<OutlinedBorder>(
+                  const RoundedRectangleBorder(),
+                )),
+          ),
+        );
       case WidgetType.image:
         return Image.network('https://example.com/image.png');
       case WidgetType.container:
-        return Container(width: 100, height: 100, color: Colors.blue);
+        return Container(width: 100, height: 100, color: Colors.white);
       default:
         return SizedBox.shrink();
     }
