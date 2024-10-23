@@ -1,4 +1,5 @@
 import 'package:compo_builder/data/component.dart';
+import 'package:compo_builder/data/widget_type.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +10,15 @@ part 'logic_event.dart';
 part 'logic_state.dart';
 
 class LogicBloc extends Bloc<LogicEvent, LogicState> {
-  LogicBloc() : super(LogicState()) {
-    on<LogicEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  LogicBloc() : super(const LogicState()) {
+    on<LogicEvent>((event, emit) {});
+    on<OnDropComponentEvent>(_onDropComponent);
+  }
+
+  void _onDropComponent(OnDropComponentEvent event, Emitter<LogicState> emit) {
+    emit(state.copyWith(droppedComponents: [
+      ...state.droppedComponents,
+      event.droppedComponentTitle
+    ]));
   }
 }

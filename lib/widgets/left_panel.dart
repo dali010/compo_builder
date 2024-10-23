@@ -1,3 +1,4 @@
+import 'package:compo_builder/data/widget_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,8 +21,8 @@ class LeftPanel extends StatelessWidget {
       ),
       itemCount: components.length,
       itemBuilder: (context, index) {
-        return Draggable<String>(
-          data: components[index].title,
+        return Draggable<WidgetType>(
+          data: components[index].type,
           feedback: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -50,7 +51,7 @@ class LeftPanel extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.w400),
                   child: Text(
-                    components[index].title,
+                    components[index].type.value,
                   ),
                 )
               ],
@@ -77,7 +78,7 @@ class LeftPanel extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  components[index].title,
+                  components[index].type.value,
                   style: const TextStyle(
                       color: Color(0xFF8E8E93),
                       fontSize: 12,

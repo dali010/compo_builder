@@ -71,10 +71,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
                           color: const Color(0xFF14181B),
                           child: LeftPanel(components: state.components),
                         ),
-                        const Expanded(
+                         Expanded(
                           flex: 4,
                           child:
-                              FittedBox(fit: BoxFit.none, child: PhoneScreen()),
+                              FittedBox(fit: BoxFit.none, child: PhoneScreen(droppedComponents: state.droppedComponents)),
                         ),
                         Container(
                           padding: const EdgeInsets.only(top: 20),
