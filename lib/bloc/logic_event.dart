@@ -4,9 +4,9 @@ part of 'logic_bloc.dart';
 sealed class LogicEvent {}
 
 class OnDropComponentEvent extends LogicEvent {
-  final CustomWidget droppedComponent;
+  final WidgetType droppedComponentTitle;
 
-  OnDropComponentEvent({required this.droppedComponent});
+  OnDropComponentEvent({required this.droppedComponentTitle});
 }
 
 class UpdateComponentTextEvent extends LogicEvent {

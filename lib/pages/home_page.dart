@@ -19,8 +19,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with WindowListener {
   bool isCorrectSize = true;
-  WidgetType? selectedComponent; // Add this to track the selected component
-  int index = 0;
 
   @override
   void initState() {
@@ -43,28 +41,18 @@ class _HomePageState extends State<HomePage> with WindowListener {
         windowSize.height < screenSize.height / 2) {
       isCorrectSize
           ? setState(() {
-        isCorrectSize = false;
-      })
+              isCorrectSize = false;
+            })
           : isCorrectSize;
     } else {
       !isCorrectSize
           ? setState(() {
-        isCorrectSize = true;
-      })
+              isCorrectSize = true;
+            })
           : isCorrectSize;
     }
     super.onWindowResize();
   }
-
-// Update the onSelectComponent function signature in HomePage
-  void onSelectComponent(WidgetType component, int index) {
-    setState(() {
-      selectedComponent = component;
-      this.index = index;  // Update the index
-    });
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,36 +66,35 @@ class _HomePageState extends State<HomePage> with WindowListener {
             builder: (BuildContext context, LogicState state) {
               return isCorrectSize
                   ? Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    width: 280,
-                    color: const Color(0xFF14181B),
-                    child: LeftPanel(components: state.components),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: FittedBox(
-                      fit: BoxFit.none,
-                      child: PhoneScreen(
-                        droppedComponents: state.droppedComponents,
-                        onSelectComponent: onSelectComponent, // This should now match the updated signature
-                        selectedComponent: selectedComponent,
-                      ),
-
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    width: 280,
-                    color: const Color(0xFF14181B),
-                    child: RightPanel(
-                      selectedComponent: selectedComponent,
-                      index: index, // Pass the index
-                    ),
-                  )
-                ],
-              )
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          width: 280,
+                          color: const Color(0xFF14181B),
+                          child: LeftPanel(components: state.components),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: FittedBox(
+                            fit: BoxFit.none,
+                            child: PhoneScreen(
+                                droppedComponents: state.droppedComponents),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          width: 280,
+                          color: const Color(0xFF14181B),
+                          child: RightPanel(
+                              selectedComponent: state.droppedComponents
+                                  .map((component) => component.isSelected
+                                      ? component.type
+                                      : null)
+                                  .firstWhere((element) => element != null,
+                                      orElse: () => null)),
+                        ),
+                      ],
+                    )
                   : const SmallScreenWarning();
             },
           ),

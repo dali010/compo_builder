@@ -5,9 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RightPanel extends StatelessWidget {
   final WidgetType? selectedComponent;
-  final int index;
 
-  const RightPanel({super.key, required this.selectedComponent, required this.index});
+  const RightPanel({super.key, required this.selectedComponent});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class RightPanel extends StatelessWidget {
               onChanged: (value) {
                 BlocProvider.of<LogicBloc>(context)
                     .add(UpdateComponentTextEvent(
-                  componentIndex: index, // index of the component in the droppedComponents list
+                  componentIndex: 0, // index of the component in the droppedComponents list
                   newText: "New Text",
                 ));
               },
@@ -61,7 +60,7 @@ class RightPanel extends StatelessWidget {
               ],
               onChanged: (Color? newColor) {
                 BlocProvider.of<LogicBloc>(context).add(UpdateComponentColorEvent(
-                  componentIndex: index, // index of the component in the droppedComponents list
+                  componentIndex: 0, // index of the component in the droppedComponents list
                   newColor: Colors.red,
                 ));
               },
@@ -77,7 +76,7 @@ class RightPanel extends StatelessWidget {
               label: 'Size',
               onChanged: (double newSize) {
                 BlocProvider.of<LogicBloc>(context).add(UpdateComponentSizeEvent(
-                  componentIndex: index, // index of the component in the droppedComponents list
+                  componentIndex: 0, // index of the component in the droppedComponents list
                   newSize: Size(200, 200),
                 ));
               },
