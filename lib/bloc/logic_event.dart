@@ -30,3 +30,9 @@ class UpdateComponentSizeEvent extends LogicEvent {
   UpdateComponentSizeEvent(
       {required this.componentIndex, required this.newSize});
 }
+
+class OnSelectDroppedComponentEvent extends LogicEvent {
+  final String id;
+
+  OnSelectDroppedComponentEvent({required this.id});
+}
