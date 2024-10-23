@@ -6,7 +6,7 @@ class LogicState extends Equatable {
 
   const LogicState(
       {this.components = constants.components,
-      this.droppedComponents = const []});
+        this.droppedComponents = const []});
 
   LogicState copyWith(
       {List<Component>? components, List<DroppedComponent>? droppedComponents}) {

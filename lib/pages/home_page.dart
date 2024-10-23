@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../widgets/right_pannel.dart';
 import '../widgets/small_screen_warning.dart';
+import 'package:compo_builder/data/widget_type.dart'; // Make sure this is imported for WidgetType
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -71,16 +73,26 @@ class _HomePageState extends State<HomePage> with WindowListener {
                           color: const Color(0xFF14181B),
                           child: LeftPanel(components: state.components),
                         ),
-                         Expanded(
+                        Expanded(
                           flex: 4,
-                          child:
-                              FittedBox(fit: BoxFit.none, child: PhoneScreen(droppedComponents: state.droppedComponents)),
+                          child: FittedBox(
+                            fit: BoxFit.none,
+                            child: PhoneScreen(
+                                droppedComponents: state.droppedComponents),
+                          ),
                         ),
                         Container(
                           padding: const EdgeInsets.only(top: 20),
                           width: 280,
                           color: const Color(0xFF14181B),
-                        )
+                          child: RightPanel(
+                              selectedComponent: state.droppedComponents
+                                  .map((component) => component.isSelected
+                                      ? component.type
+                                      : null)
+                                  .firstWhere((element) => element != null,
+                                      orElse: () => null)),
+                        ),
                       ],
                     )
                   : const SmallScreenWarning();
