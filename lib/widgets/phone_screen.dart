@@ -69,9 +69,9 @@ class _PhoneScreenState extends State<PhoneScreen> {
                         ),
                         // The color of the small container
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: const Text(
-                          'Button', // Your text here
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        child:  Text(
+                          component.type.value, // Your text here
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ),
                     ),
