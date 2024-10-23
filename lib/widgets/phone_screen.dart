@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PhoneScreen extends StatefulWidget {
-   List<WidgetType> droppedComponents;
+  final List<WidgetType> droppedComponents;
 
-   PhoneScreen({super.key, required this.droppedComponents});
+  const PhoneScreen({super.key, required this.droppedComponents});
 
   @override
   State<PhoneScreen> createState() => _PhoneScreenState();
@@ -29,8 +29,11 @@ class _PhoneScreenState extends State<PhoneScreen> {
             width: 5,
           ),
         ),
-        child: const Column(
-          children: [],
+        child: Column(
+          children: widget.droppedComponents.map((component) {
+            // Assuming you have a method to convert WidgetType to a widget
+            return WidgetFactory.createWidget(component);
+          }).toList(),
         ),
       );
     }, onWillAcceptWithDetails: (details) {
