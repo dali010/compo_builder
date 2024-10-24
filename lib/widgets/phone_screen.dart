@@ -48,7 +48,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
                             ),
                           )
                         : null,
-                    child: WidgetFactory.createWidget(component.type),
+                    child: component.widget,
                   ),
                   if (component.isSelected)
                     Positioned(
