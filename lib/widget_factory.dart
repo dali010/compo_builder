@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:compo_builder/data/widget_type.dart';
 import 'package:flutter/material.dart';
 
@@ -19,11 +20,30 @@ class WidgetFactory {
           ),
         );
       case WidgetType.image:
-        return Image.network('https://example.com/image.png');
+        return CachedNetworkImage(
+          imageUrl:
+              'https://picsum.photos/100?random=${DateTime.now().millisecondsSinceEpoch}',
+          placeholder: (context, url) => const SizedBox(
+            height: 100,
+            width: 100,
+            child: Center(
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Color(0xFF023047)),
+                  strokeWidth: 3,
+                ),
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        );
+
       case WidgetType.container:
-        return Container(width: 100, height: 100, color: Colors.white);
+        return Container(width: 35, height: 35, color: Colors.white);
       default:
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
     }
   }
 }

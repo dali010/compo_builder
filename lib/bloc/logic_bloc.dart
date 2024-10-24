@@ -18,19 +18,24 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
   }
 
   void _onDropComponent(OnDropComponentEvent event, Emitter<LogicState> emit) {
+    List<DroppedComponent> unselectedList = state.droppedComponents
+        .map((component) => component.copyWith())
+        .toList();
     emit(state.copyWith(droppedComponents: [
-      ...state.droppedComponents,
-      DroppedComponent(type: event.droppedComponentTitle)
+      ...unselectedList,
+      DroppedComponent(
+        type: event.droppedComponentTitle,
+      )
     ]));
   }
 
-  void _onSelectDroppedComponent(OnSelectDroppedComponentEvent event, Emitter<LogicState> emit) {
+  void _onSelectDroppedComponent(
+      OnSelectDroppedComponentEvent event, Emitter<LogicState> emit) {
     emit(state.copyWith(
-        droppedComponents: state.droppedComponents.map((component) =>
-        component.id == event.id
-            ? component.copyWith(isSelected: !component.isSelected)
-            : component.copyWith()
-        ).toList()
-    ));
+        droppedComponents: state.droppedComponents
+            .map((component) => component.id == event.id
+                ? component.copyWith(isSelected: !component.isSelected)
+                : component.copyWith())
+            .toList()));
   }
 }
