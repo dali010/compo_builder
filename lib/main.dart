@@ -17,7 +17,7 @@ void main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
-    await windowManager.setFullScreen(true);
+    // await windowManager.setFullScreen(true);
   });
   runApp(const MyApp());
 }
