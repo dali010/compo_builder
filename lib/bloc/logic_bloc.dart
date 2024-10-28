@@ -1,4 +1,4 @@
-import 'package:compo_builder/bloc/update_text_event.dart';
+import 'package:compo_builder/bloc/text_events.dart';
 import 'package:compo_builder/data/component.dart';
 import 'package:compo_builder/data/text_configuration.dart';
 import 'package:compo_builder/data/widget_type.dart';
@@ -53,6 +53,65 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
                               .copyWith(text: event.newText))
                   : component.copyWith())
               .toList()));
+    } else if (event is UpdateColorEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as TextConfiguration)
+                              .copyWith(color: event.color))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateFontWeightEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration: (component.configuration
+                              as TextConfiguration)
+                          .copyWith(
+                              fontWeight:
+                                  getFontWeightFromString(event.fontWeight)))
+                  : component.copyWith())
+              .toList()));
+    }
+  }
+
+  FontWeight? getFontWeightFromString(String fontWeightString) {
+    switch (fontWeightString.toLowerCase()) {
+      case 'normal':
+        return FontWeight.normal;
+      case 'bold':
+        return FontWeight.bold;
+      case 'light':
+        return FontWeight.w300;
+      case 'medium':
+        return FontWeight.w500;
+      case 'semi-bold':
+        return FontWeight.w600;
+      case 'extra-bold':
+        return FontWeight.w800;
+      case '100':
+        return FontWeight.w100;
+      case '200':
+        return FontWeight.w200;
+      case '300':
+        return FontWeight.w300;
+      case '400':
+        return FontWeight.w400;
+      case '500':
+        return FontWeight.w500;
+      case '600':
+        return FontWeight.w600;
+      case '700':
+        return FontWeight.w700;
+      case '800':
+        return FontWeight.w800;
+      case '900':
+        return FontWeight.w900;
+      default:
+        return null; // or throw an error if invalid
     }
   }
 }

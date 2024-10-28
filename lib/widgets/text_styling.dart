@@ -1,39 +1,55 @@
 import 'package:compo_builder/bloc/logic_bloc.dart';
+import 'package:compo_builder/data/text_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../bloc/update_text_event.dart';
+import '../bloc/text_events.dart';
+import '../data/dropped_component.dart';
 
 class TextStyling extends StatefulWidget {
-  final String initialValue;
-  final int componentIndex;
+  final TextConfiguration configuration;
 
   const TextStyling({
-    Key? key,
-    required this.initialValue,
-    required this.componentIndex,
-  }) : super(key: key);
+    super.key,
+    required this.configuration
+  });
 
   @override
-  _TextStylingState createState() => _TextStylingState();
+  State<TextStyling> createState() => _TextStylingState();
 }
 
 class _TextStylingState extends State<TextStyling> {
+
+  final TextEditingController _editingController =
+  TextEditingController(text: 'Hello World');
+
+  @override
+  void didUpdateWidget(covariant TextStyling oldWidget) {
+    if(oldWidget.configuration != widget.configuration) {
+      _editingController.text = widget.configuration.text;
+      setState(() {
+        currentColor = widget.configuration.color;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   String selectedTextStyle = 'Regular';
   String selectedFontFamily = 'Roboto';
   String selectedFontWeight = 'Normal';
   String selectedFontStyle = 'None';
 
   String fontSize = '14'; // Font size input
-  Color currentColor = Colors.white; // Default text color
+  Color currentColor = Colors.black; // Default text color
+  Color selectedColor = Colors.black; // Default text color
 
   // Method to show color picker
   void pickColor(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (_) {
         return AlertDialog(
           title: const Text('Pick a color'),
           content: SingleChildScrollView(
@@ -41,7 +57,7 @@ class _TextStylingState extends State<TextStyling> {
               pickerColor: currentColor,
               onColorChanged: (Color color) {
                 setState(() {
-                  currentColor = color; // Update the selected color
+                  selectedColor = color; // Update the selected color
                 });
               },
             ),
@@ -50,6 +66,10 @@ class _TextStylingState extends State<TextStyling> {
             TextButton(
               child: const Text('Select'),
               onPressed: () {
+                BlocProvider.of<LogicBloc>(context).add(UpdateColorEvent(color: selectedColor));
+                setState(() {
+                  currentColor = selectedColor; // Update the selected color
+                });
                 Navigator.of(context).pop(); // Close the color picker
               },
             ),
@@ -95,10 +115,11 @@ class _TextStylingState extends State<TextStyling> {
       children: [
         // Text field for changing the text of the component...
         TextFormField(
-          initialValue: widget.initialValue,
+          controller: _editingController,
           style: const TextStyle(
             fontSize: 12,
             color: Colors.white,
+            fontWeight: FontWeight.w100
           ),
           decoration: InputDecoration(
             labelStyle: const TextStyle(
@@ -328,8 +349,11 @@ class _TextStylingState extends State<TextStyling> {
                       );
                     }).toList(),
                     onChanged: (newValue) {
+                      BlocProvider.of<LogicBloc>(context).add(UpdateFontWeightEvent(
+                        fontWeight: newValue!,
+                      ));
                       setState(() {
-                        selectedFontWeight = newValue!;
+                        selectedFontWeight = newValue;
                       });
                     },
                     decoration: InputDecoration(

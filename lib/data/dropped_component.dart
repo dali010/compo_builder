@@ -31,12 +31,13 @@ class DroppedComponent extends Equatable {
       bool? isSelected,
       Widget? widget,
       CustomConfiguration? configuration}) {
+    TextConfiguration? textConfiguration = (configuration as TextConfiguration?);
     return DroppedComponent(
       type: type ?? this.type,
       isSelected: isSelected ?? this.isSelected,
-      widget: widget ?? (configuration != null
+      widget: widget ?? (textConfiguration != null
               ? this.type == WidgetType.text
-                  ? Text((configuration as TextConfiguration).text)
+                  ? Text(textConfiguration.text, style: TextStyle(color: textConfiguration.color, fontWeight: textConfiguration.fontWeight),)
                   : this.widget
               : this.widget),
       configuration: configuration ?? this.configuration,

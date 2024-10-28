@@ -26,8 +26,6 @@ class TextConfiguration extends CustomConfiguration {
   final TextAlign textAlign;
   final TextDecoration decoration;
 
-  // UUID generator for unique IDs
-
   const TextConfiguration({
     this.text = 'Hello World' ,
     this.color = Colors.black,
@@ -45,6 +43,7 @@ class TextConfiguration extends CustomConfiguration {
     TextAlign? textAlign,
     TextDecoration? decoration,
   }) {
+    print('fdsjkfjkdsfhkj $fontWeight');
     return TextConfiguration(
       text: text ?? this.text,
       color: color ?? this.color,
