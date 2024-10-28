@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:compo_builder/bloc/logic_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TextStyling extends StatefulWidget {
   final String initialValue;
@@ -21,6 +23,39 @@ class _TextStylingState extends State<TextStyling> {
   String selectedFontFamily = 'Roboto';
   String selectedFontWeight = 'Normal';
   String selectedFontStyle = 'None';
+
+  String fontSize = '14'; // Font size input
+  Color currentColor = Colors.white; // Default text color
+
+  // Method to show color picker
+  void pickColor(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Pick a color'),
+          content: SingleChildScrollView(
+            child: BlockPicker(
+              pickerColor: currentColor,
+              onColorChanged: (Color color) {
+                setState(() {
+                  currentColor = color; // Update the selected color
+                });
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Select'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the color picker
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // List of text style options
   final List<String> textStyles = [
@@ -70,7 +105,7 @@ class _TextStylingState extends State<TextStyling> {
             filled: true,
             fillColor: const Color(0xFF2E3741).withOpacity(0.8),
             contentPadding:
-            const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
@@ -196,7 +231,7 @@ class _TextStylingState extends State<TextStyling> {
         const SizedBox(height: 10),
         // Font Family dropdown...
         SizedBox(
-          width: 160,
+          width: double.infinity,
           height: 40,
           child: DropdownButtonFormField<String>(
             value: selectedFontFamily,
@@ -419,9 +454,470 @@ class _TextStylingState extends State<TextStyling> {
                   ],
                 ),
               ],
-            )
+            ),
           ],
         ),
+        const SizedBox(height: 10),
+
+        // Font Size and Text Color in a Row...
+        Row(
+          children: [
+            // Font Size Input Field
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Font Size',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF8E8E93),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      SvgPicture.asset(
+                        'assets/icons/settings_ic.svg',
+                        width: 16,
+                        height: 16,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    initialValue: fontSize,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        fontSize = value; // Update the font size
+                      });
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xFF2E3741).withOpacity(0.8),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: const Color(0xFF2E3741).withOpacity(0.8),
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF8E8E93),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 20),
+            // Text Color Input and Color Picker
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Text Color',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF8E8E93),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      SvgPicture.asset(
+                        'assets/icons/settings_ic.svg',
+                        width: 16,
+                        height: 16,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      // TextField for hex color input
+                      Expanded(
+                        child: TextFormField(
+                          initialValue:
+                              '#${currentColor.value.toRadixString(16).substring(2)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              // Ensure the value starts with a '#' and is a valid hex color
+                              if (value.startsWith('#') && value.length == 7) {
+                                try {
+                                  currentColor = Color(
+                                      int.parse(value.substring(1), radix: 16) +
+                                          0xFF000000);
+                                } catch (e) {
+                                  // Handle invalid hex input
+                                }
+                              }
+                            });
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color(0xFF2E3741).withOpacity(0.8),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: const Color(0xFF2E3741).withOpacity(0.8),
+                                width: 1.5,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF8E8E93),
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      // Color Picker Button
+                      GestureDetector(
+                        onTap: () => pickColor(context),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: currentColor, // Show selected color
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: const Color(0xFF8E8E93),
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // Line Height and Letter Spacing in a Row...
+        Row(
+          children: [
+            // Line Height Input Field
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Line Height',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF8E8E93),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Icon(
+                        Icons.info_outline,
+                        color: Color(0xFF8E8E93),
+                        size: 15,
+                      ),
+                      const SizedBox(width: 5),
+                      SvgPicture.asset(
+                        'assets/icons/settings_ic.svg',
+                        width: 16,
+                        height: 16,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    initialValue: '1.0',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      // Update the line height
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xFF2E3741).withOpacity(0.8),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: const Color(0xFF2E3741).withOpacity(0.8),
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF8E8E93),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 5),
+            // Letter Spacing Input Field...
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Letter Spacing',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF8E8E93),
+                        ),
+                      ),
+                      const SizedBox(width: 3),
+                      const Icon(
+                        Icons.info_outline,
+                        color: Color(0xFF8E8E93),
+                        size: 15,
+                      ),
+                      SvgPicture.asset(
+                        'assets/icons/settings_ic.svg',
+                        width: 16,
+                        height: 16,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    initialValue: '0.0',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      // Update the letter spacing
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xFF2E3741).withOpacity(0.8),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: const Color(0xFF2E3741).withOpacity(0.8),
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF8E8E93),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            // Text Alignment Icon buttons
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Text Align',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF8E8E93),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Left Align button
+                      Container(
+                        width: 30,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF2E3741),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            // Align text to the left
+                          },
+                          icon: const Icon(
+                            Icons.format_align_left,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          padding: EdgeInsets.zero,
+                          splashRadius: 15,
+                        ),
+                      ),
+                      // Center Align button
+                      Container(
+                        width: 30,
+                        height: 40,
+                        color: const Color(0xFF2E3741),
+                        child: IconButton(
+                          onPressed: () {
+                            // Align text to the center
+                          },
+                          icon: const Icon(
+                            Icons.format_align_center,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          padding: EdgeInsets.zero,
+                          splashRadius: 15,
+                        ),
+                      ),
+                      // Right Align button
+                      Container(
+                        width: 30,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF2E3741),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            // Justify text alignment
+                          },
+                          icon: const Icon(
+                            Icons.format_align_right,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          padding: EdgeInsets.zero,
+                          splashRadius: 15,
+                        ),
+                      ),
+                      // Justify Align button
+                      Container(
+                        width: 30,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2E3741),
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            // Align text to the right
+                          },
+                          icon: const Icon(
+                            Icons.format_align_justify,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          padding: EdgeInsets.zero,
+                          splashRadius: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            // Max Lines Input Field...
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Max Lines',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF8E8E93),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Icon(
+                        Icons.info_outline,
+                        color: Color(0xFF8E8E93),
+                        size: 15,
+                      ),
+                      const SizedBox(width: 5),
+                      SvgPicture.asset(
+                        'assets/icons/settings_ic.svg',
+                        width: 16,
+                        height: 16,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 40, // Adjust the height of the text field
+                    child: TextFormField(
+                      initialValue: '1',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        // Update the max lines
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFF2E3741).withOpacity(0.8),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: const Color(0xFF2E3741).withOpacity(0.8),
+                            width: 1.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF8E8E93),
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
