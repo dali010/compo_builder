@@ -9,11 +9,7 @@ class OnDropComponentEvent extends LogicEvent {
   OnDropComponentEvent({required this.droppedComponentTitle});
 }
 
-class UpdateComponentTextEvent extends LogicEvent {
-  final int componentIndex;
-  final String newText;
-
-  UpdateComponentTextEvent({required this.componentIndex, required this.newText});
+abstract class UpdateTextEvent extends LogicEvent {
 }
 
 class UpdateComponentColorEvent extends LogicEvent {

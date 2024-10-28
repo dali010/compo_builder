@@ -1,8 +1,10 @@
+import 'package:compo_builder/bloc/logic_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:compo_builder/bloc/logic_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../bloc/update_text_event.dart';
 
 class TextStyling extends StatefulWidget {
   final String initialValue;
@@ -129,8 +131,8 @@ class _TextStylingState extends State<TextStyling> {
             ),
           ),
           onChanged: (value) {
-            BlocProvider.of<LogicBloc>(context).add(UpdateComponentTextEvent(
-              componentIndex: widget.componentIndex,
+            print('dfkjshkjdshfjkdsf $value');
+            BlocProvider.of<LogicBloc>(context).add(UpdateTextValueEvent(
               newText: value,
             ));
           },
