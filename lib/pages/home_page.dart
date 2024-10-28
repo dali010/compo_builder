@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
                                       ? component.type
                                       : null)
                                   .firstWhere((element) => element != null,
-                                      orElse: () => null)),
+                                      orElse: () => null), index: 0,),
                         ),
                       ],
                     )
