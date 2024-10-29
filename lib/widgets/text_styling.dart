@@ -569,6 +569,7 @@ class _TextStylingState extends State<TextStyling> {
                     ],
                   ),
                   const SizedBox(height: 10),
+                  // Text Color Input Field and Color Picker Button...
                   Row(
                     children: [
                       // TextField for hex color input

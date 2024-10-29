@@ -19,8 +19,6 @@ class _ImageStylingState extends State<ImageStyling> {
   late TextEditingController _widthController;
   late TextEditingController _heightController;
   late TextEditingController _borderRadiusController;
-  String _widthUnit = "PX";
-  String _heightUnit = "PX";
 
   @override
   void initState() {
