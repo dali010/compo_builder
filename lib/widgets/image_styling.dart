@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ImageStyling extends StatefulWidget {
   final int componentIndex;
 
-  const ImageStyling({Key? key, required this.componentIndex})
-      : super(key: key);
+  const ImageStyling({Key? key, required this.componentIndex}) : super(key: key);
 
   @override
   _ImageStylingState createState() => _ImageStylingState();
@@ -19,16 +19,15 @@ class _ImageStylingState extends State<ImageStyling> {
   late TextEditingController _widthController;
   late TextEditingController _heightController;
   late TextEditingController _borderRadiusController;
+  String _imageType = 'Network';
 
   @override
   void initState() {
     super.initState();
-    _opacityController =
-        TextEditingController(text: _opacity.toStringAsFixed(1));
+    _opacityController = TextEditingController(text: _opacity.toStringAsFixed(1));
     _widthController = TextEditingController(text: "178");
     _heightController = TextEditingController(text: "200");
-    _borderRadiusController =
-        TextEditingController(text: _borderRadius.toStringAsFixed(1));
+    _borderRadiusController = TextEditingController(text: _borderRadius.toStringAsFixed(1));
   }
 
   @override
@@ -50,23 +49,12 @@ class _ImageStylingState extends State<ImageStyling> {
           children: [
             const Text(
               'Opacity',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF8E8E93),
-              ),
+              style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93)),
             ),
             const SizedBox(width: 5),
-            const Icon(
-              Icons.info_outline,
-              color: Color(0xFF8E8E93),
-              size: 15,
-            ),
+            const Icon(Icons.info_outline, color: Color(0xFF8E8E93), size: 15),
             const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/icons/settings_ic.svg',
-              width: 16,
-              height: 16,
-            ),
+            SvgPicture.asset('assets/icons/settings_ic.svg', width: 16, height: 16),
           ],
         ),
         const SizedBox(height: 10),
@@ -91,36 +79,25 @@ class _ImageStylingState extends State<ImageStyling> {
               width: 50,
               child: TextFormField(
                 controller: _opacityController,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                ),
+                style: const TextStyle(fontSize: 14, color: Colors.white),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: const Color(0xFF2E3741).withOpacity(0.8),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                      color: const Color(0xFF2E3741).withOpacity(0.8),
-                      width: 1.5,
-                    ),
+                    borderSide: BorderSide(color: const Color(0xFF2E3741).withOpacity(0.8), width: 1.5),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF8E8E93),
-                      width: 2,
-                    ),
+                    borderSide: const BorderSide(color: Color(0xFF8E8E93), width: 2),
                   ),
                 ),
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   setState(() {
                     double? newValue = double.tryParse(value);
-                    if (newValue != null &&
-                        newValue >= 0.0 &&
-                        newValue <= 1.0) {
+                    if (newValue != null && newValue >= 0.0 && newValue <= 1.0) {
                       _opacity = newValue;
                     }
                   });
@@ -147,19 +124,9 @@ class _ImageStylingState extends State<ImageStyling> {
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        'Width',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF8E8E93),
-                        ),
-                      ),
+                      const Text('Width', style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
                       const SizedBox(width: 5),
-                      SvgPicture.asset(
-                        'assets/icons/settings_ic.svg',
-                        width: 16,
-                        height: 16,
-                      )
+                      SvgPicture.asset('assets/icons/settings_ic.svg', width: 16, height: 16),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -168,27 +135,18 @@ class _ImageStylingState extends State<ImageStyling> {
                       Expanded(
                         child: TextFormField(
                           controller: _widthController,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.white),
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: const Color(0xFF2E3741).withOpacity(0.8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(
-                                color: const Color(0xFF2E3741).withOpacity(0.8),
-                                width: 1.5,
-                              ),
+                              borderSide: BorderSide(color: const Color(0xFF2E3741).withOpacity(0.8), width: 1.5),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF8E8E93),
-                                width: 2,
-                              ),
+                              borderSide: const BorderSide(color: Color(0xFF8E8E93), width: 2),
                             ),
                           ),
                           textAlign: TextAlign.center,
@@ -207,19 +165,9 @@ class _ImageStylingState extends State<ImageStyling> {
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        'Height',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF8E8E93),
-                        ),
-                      ),
+                      const Text('Height', style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
                       const SizedBox(width: 5),
-                      SvgPicture.asset(
-                        'assets/icons/settings_ic.svg',
-                        width: 16,
-                        height: 16,
-                      )
+                      SvgPicture.asset('assets/icons/settings_ic.svg', width: 16, height: 16),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -228,27 +176,18 @@ class _ImageStylingState extends State<ImageStyling> {
                       Expanded(
                         child: TextFormField(
                           controller: _heightController,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.white),
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: const Color(0xFF2E3741).withOpacity(0.8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(
-                                color: const Color(0xFF2E3741).withOpacity(0.8),
-                                width: 1.5,
-                              ),
+                              borderSide: BorderSide(color: const Color(0xFF2E3741).withOpacity(0.8), width: 1.5),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF8E8E93),
-                                width: 2,
-                              ),
+                              borderSide: const BorderSide(color: Color(0xFF8E8E93), width: 2),
                             ),
                           ),
                           textAlign: TextAlign.center,
@@ -265,25 +204,11 @@ class _ImageStylingState extends State<ImageStyling> {
         // Border Radius row with slider and text field...
         Row(
           children: [
-            const Text(
-              'Border Radius',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF8E8E93),
-              ),
-            ),
+            const Text('Border Radius', style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
             const SizedBox(width: 5),
-            const Icon(
-              Icons.info_outline,
-              color: Color(0xFF8E8E93),
-              size: 15,
-            ),
+            const Icon(Icons.info_outline, color: Color(0xFF8E8E93), size: 15),
             const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/icons/settings_ic.svg',
-              width: 16,
-              height: 16,
-            ),
+            SvgPicture.asset('assets/icons/settings_ic.svg', width: 16, height: 16),
           ],
         ),
         const SizedBox(height: 10),
@@ -300,8 +225,7 @@ class _ImageStylingState extends State<ImageStyling> {
                 onChanged: (value) {
                   setState(() {
                     _borderRadius = value;
-                    _borderRadiusController.text =
-                        _borderRadius.toStringAsFixed(1);
+                    _borderRadiusController.text = _borderRadius.toStringAsFixed(1);
                   });
                 },
               ),
@@ -310,36 +234,25 @@ class _ImageStylingState extends State<ImageStyling> {
               width: 50,
               child: TextFormField(
                 controller: _borderRadiusController,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                ),
+                style: const TextStyle(fontSize: 14, color: Colors.white),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: const Color(0xFF2E3741).withOpacity(0.8),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                      color: const Color(0xFF2E3741).withOpacity(0.8),
-                      width: 1.5,
-                    ),
+                    borderSide: BorderSide(color: const Color(0xFF2E3741).withOpacity(0.8), width: 1.5),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF8E8E93),
-                      width: 2,
-                    ),
+                    borderSide: const BorderSide(color: Color(0xFF8E8E93), width: 2),
                   ),
                 ),
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   setState(() {
                     double? newValue = double.tryParse(value);
-                    if (newValue != null &&
-                        newValue >= 0.0 &&
-                        newValue <= 50.0) {
+                    if (newValue != null && newValue >= 0.0 && newValue <= 50.0) {
                       _borderRadius = newValue;
                     }
                   });
@@ -352,25 +265,11 @@ class _ImageStylingState extends State<ImageStyling> {
         // Image Type Dropdown...
         Row(
           children: [
-            const Text(
-              'Image Type',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF8E8E93),
-              ),
-            ),
+            const Text('Image Type', style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
             const SizedBox(width: 5),
-            const Icon(
-              Icons.info_outline,
-              color: Color(0xFF8E8E93),
-              size: 15,
-            ),
+            const Icon(Icons.info_outline, color: Color(0xFF8E8E93), size: 15),
             const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/icons/settings_ic.svg',
-              width: 16,
-              height: 16,
-            ),
+            SvgPicture.asset('assets/icons/settings_ic.svg', width: 16, height: 16),
           ],
         ),
         const SizedBox(height: 10),
@@ -382,30 +281,18 @@ class _ImageStylingState extends State<ImageStyling> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: DropdownButton<String>(
-            value: 'Network',
+            value: _imageType,
             dropdownColor: const Color(0xFF2E3741).withOpacity(0.8),
-            icon: SvgPicture.asset(
-              'assets/icons/dropdown_ic.svg',
-              width: 16,
-              height: 16,
-            ),
             iconSize: 24,
             elevation: 16,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-            underline: Container(
-              height: 0,
-              color: Colors.transparent,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 14),
+            underline: Container(height: 0, color: Colors.transparent),
             onChanged: (String? newValue) {
               setState(() {
-                // _imageType = newValue!;
+                _imageType = newValue!;
               });
             },
-            items: <String>['Network', 'Asset', 'File']
-                .map<DropdownMenuItem<String>>((String value) {
+            items: <String>['Network', 'Asset'].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -413,6 +300,20 @@ class _ImageStylingState extends State<ImageStyling> {
             }).toList(),
           ),
         ),
+        const SizedBox(height: 10),
+        // Conditionally render the import button for Asset type
+        if (_imageType == 'Asset')
+          ElevatedButton(
+            onPressed: () async {
+              final ImagePicker _picker = ImagePicker();
+              final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+              if (image != null) {
+                // Handle the selected image
+                print('Image path: ${image.path}');
+              }
+            },
+            child: const Text('Import Picture'),
+          ),
         const SizedBox(height: 10),
         // Image URL input field...
         Row(
@@ -423,19 +324,9 @@ class _ImageStylingState extends State<ImageStyling> {
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        'Image URL',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF8E8E93),
-                        ),
-                      ),
+                      const Text('Image URL', style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
                       const SizedBox(width: 5),
-                      SvgPicture.asset(
-                        'assets/icons/settings_ic.svg',
-                        width: 16,
-                        height: 16,
-                      )
+                      SvgPicture.asset('assets/icons/settings_ic.svg', width: 16, height: 16),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -445,31 +336,19 @@ class _ImageStylingState extends State<ImageStyling> {
                       Expanded(
                         child: TextFormField(
                           // text hint for image URL...
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.white),
                           decoration: InputDecoration(
                             hintText: 'Enter Image URL',
-                            hintStyle: const TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF8E8E93),
-                            ),
+                            hintStyle: const TextStyle(fontSize: 14, color: Color(0xFF8E8E93)),
                             filled: true,
                             fillColor: const Color(0xFF2E3741).withOpacity(0.8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(
-                                color: const Color(0xFF2E3741).withOpacity(0.8),
-                                width: 1.5,
-                              ),
+                              borderSide: BorderSide(color: const Color(0xFF2E3741).withOpacity(0.8), width: 1.5),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF8E8E93),
-                                width: 2,
-                              ),
+                              borderSide: const BorderSide(color: Color(0xFF8E8E93), width: 2),
                             ),
                           ),
                         ),
@@ -480,72 +359,86 @@ class _ImageStylingState extends State<ImageStyling> {
                   // Box fit icons row...
                   Row(
                     children: [
-                      const Text(
-                        'Box Fit',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF8E8E93),
-                        ),
-                      ),
+                      const Text('Box Fit', style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
                       const SizedBox(width: 5),
-                      const Icon(
-                        Icons.info_outline,
-                        color: Color(0xFF8E8E93),
-                        size: 15,
-                      ),
+                      const Icon(Icons.info_outline, color: Color(0xFF8E8E93), size: 15),
                       const SizedBox(width: 5),
-                      SvgPicture.asset(
-                        'assets/icons/settings_ic.svg',
-                        width: 16,
-                        height: 16,
-                      ),
+                      SvgPicture.asset('assets/icons/settings_ic.svg', width: 16, height: 16),
                     ],
                   ),
                   const SizedBox(height: 10),
                   // Box fit icons...
                   Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: Colors.grey[900],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: Icon(Icons.crop_square,
-                                  color: Colors.grey[300]),
+                              constraints: BoxConstraints(),
+                              padding: EdgeInsets.all(5),
+                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/contain.svg'),
                               onPressed: () {},
                               hoverColor: Colors.grey[700],
-                              padding: EdgeInsets.all(8),
                             ),
                             IconButton(
-                              icon: Icon(Icons.square_outlined,
-                                  color: Colors.grey[300]),
+                              constraints: BoxConstraints(),
+                              padding: EdgeInsets.all(5),
+                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/cover.svg'),
                               onPressed: () {},
                               hoverColor: Colors.grey[700],
-                              padding: EdgeInsets.all(8),
                             ),
                             IconButton(
-                              icon: Icon(Icons.square_outlined,
-                                  color: Colors.grey[300]),
+                              constraints: BoxConstraints(),
+                              padding: EdgeInsets.all(5),
+                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fill.svg'),
                               onPressed: () {},
                               hoverColor: Colors.grey[700],
-                              padding: EdgeInsets.all(8),
                             ),
                             IconButton(
-                              icon: Icon(Icons.face, color: Colors.grey[300]),
+                              constraints: BoxConstraints(),
+                              padding: EdgeInsets.all(5),
+                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fitWidth.svg'),
                               onPressed: () {
                                 print('Face');
                               },
                               hoverColor: Colors.grey[700],
-                              padding: EdgeInsets.all(8),
+                            ),
+                            IconButton(
+                              constraints: BoxConstraints(),
+                              padding: EdgeInsets.all(5),
+                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fitHeight.svg'),
+                              onPressed: () {
+                                print('Face');
+                              },
+                              hoverColor: Colors.grey[700],
+                            ),
+                            IconButton(
+                              constraints: BoxConstraints(),
+                              padding: EdgeInsets.all(5),
+                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/none.svg'),
+                              onPressed: () {
+                                print('Face');
+                              },
+                              hoverColor: Colors.grey[700],
+                            ),
+                            IconButton(
+                              constraints: BoxConstraints(),
+                              padding: EdgeInsets.all(5),
+                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/scaleDown.svg'),
+                              onPressed: () {
+                                print('Face');
+                              },
+                              hoverColor: Colors.grey[700],
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
