@@ -41,6 +41,7 @@ class _ImageStylingState extends State<ImageStyling> {
     _borderRadiusController =
         TextEditingController(text: _borderRadius.toStringAsFixed(1));
   }
+
   Future<void> _pickImage() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -205,6 +206,9 @@ class _ImageStylingState extends State<ImageStyling> {
                             ),
                           ),
                           textAlign: TextAlign.center,
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context)
+                                  .add(UpdateWidthEvent(width: value)),
                         ),
                       ),
                     ],
@@ -254,6 +258,10 @@ class _ImageStylingState extends State<ImageStyling> {
                             ),
                           ),
                           textAlign: TextAlign.center,
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                            UpdateHeightEvent(height: value),
+                          ),
                         ),
                       ),
                     ],
@@ -383,7 +391,6 @@ class _ImageStylingState extends State<ImageStyling> {
           ),
 
         if (_imagePath != null) Image.file(File(_imagePath!)),
-
 
         const SizedBox(height: 10),
         // Image URL input field...
