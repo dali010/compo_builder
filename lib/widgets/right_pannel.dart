@@ -116,7 +116,7 @@ class _RightPanelState extends State<RightPanel> {
                 style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
             const SizedBox(height: 10),
             ButtonStyling(
-              componentIndex: widget.index,
+              componentIndex: widget.index, configuration: selectedComponent?.configuration as TextConfiguration,
             ),
             const SizedBox(height: 20),
           ],
