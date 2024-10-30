@@ -1,6 +1,6 @@
 import 'package:compo_builder/data/dropped_component.dart';
-import 'package:compo_builder/data/text_configuration.dart';
 import 'package:compo_builder/data/widget_type.dart';
+import 'package:compo_builder/data/widgets_configurations.dart' as wg;
 import 'package:flutter/material.dart';
 
 import 'button_styling.dart'; // Import the new widget
@@ -77,7 +77,7 @@ class _RightPanelState extends State<RightPanel> {
             const SizedBox(height: 10),
             TextStyling(
               configuration:
-                  (selectedComponent?.configuration as TextConfiguration),
+                  (selectedComponent?.configuration as wg.TextConfiguration),
             ),
             const SizedBox(height: 20),
           ],
@@ -90,7 +90,8 @@ class _RightPanelState extends State<RightPanel> {
                 style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
             const SizedBox(height: 10),
             ImageStyling(
-              componentIndex: widget.index,
+              configuration:
+                  (selectedComponent!.configuration as wg.ImageConfiguration),
             ),
             const SizedBox(height: 20),
           ],

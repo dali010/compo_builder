@@ -11,6 +11,8 @@ sealed class CustomConfiguration extends Equatable {
     switch (widgetType) {
       case WidgetType.text:
         return const TextConfiguration();
+      case WidgetType.image:
+        return ImageConfiguration();
       default:
         return const TextConfiguration();
     }
@@ -107,4 +109,44 @@ class TextConfiguration extends CustomConfiguration {
         maxLines,
         maxLinesValue
       ];
+}
+
+class ImageConfiguration extends CustomConfiguration {
+  final double opacity;
+  final double width;
+  final double height;
+  final BorderRadius? borderRadius;
+  final BoxFit boxFit;
+  final String imageUrl;
+
+  ImageConfiguration(
+      {this.opacity = 1,
+      this.width = 100,
+      this.height = 100,
+      this.borderRadius,
+      this.boxFit = BoxFit.cover,
+      String? imageUrl})
+      : imageUrl = imageUrl ??
+            'https://picsum.photos/100?random=${DateTime.now().millisecondsSinceEpoch}';
+
+  ImageConfiguration copyWith({
+    double? opacity,
+    double? width,
+    double? height,
+    BorderRadius? borderRadius,
+    BoxFit? boxFit,
+    String? imageUrl,
+  }) {
+    return ImageConfiguration(
+        opacity: opacity ?? this.opacity,
+        width: width ?? this.width,
+        height: height ?? this.height,
+        borderRadius: borderRadius ?? this.borderRadius,
+        boxFit: boxFit ?? this.boxFit,
+        imageUrl: imageUrl ?? this.imageUrl);
+  }
+
+  @override
+  List<Object?> get props =>
+      [opacity, width, height, borderRadius, boxFit, imageUrl];
 }
