@@ -110,7 +110,7 @@ class _ContainerStylingState extends State<ContainerStyling> {
                 ),
               ),
               const SizedBox(width: 5),
-              Icon(
+              const Icon(
                 Icons.info_outline,
                 color: Color(0xFF8E8E93),
                 size: 15,
