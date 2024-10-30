@@ -8,7 +8,6 @@ import 'package:window_manager/window_manager.dart';
 
 import '../widgets/right_pannel.dart';
 import '../widgets/small_screen_warning.dart';
-import 'package:compo_builder/data/widget_type.dart'; // Make sure this is imported for WidgetType
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -83,15 +82,15 @@ class _HomePageState extends State<HomePage> with WindowListener {
                         ),
                         Container(
                           padding: const EdgeInsets.only(top: 20),
-                          width: 280,
+                          width: 310,
                           color: const Color(0xFF14181B),
                           child: RightPanel(
                               selectedComponent: state.droppedComponents
-                                  .map((component) => component.isSelected
-                                      ? component.type
-                                      : null)
+                                  .map((component) =>
+                                      component.isSelected ? component : null)
                                   .firstWhere((element) => element != null,
-                                      orElse: () => null), index: 0,),
+                                      orElse: () => null),
+                              index: 0),
                         ),
                       ],
                     )
