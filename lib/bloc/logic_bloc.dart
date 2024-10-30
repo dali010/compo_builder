@@ -208,6 +208,26 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
                                   borderRadius: double.tryParse(event.borderRadius)))
                   : component.copyWith())
               .toList()));
+    } else if (event is UpdateImageUrlEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(imageUrl: event.imageUrl))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateBoxFitEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(boxFit: event.boxFit))
+                  : component.copyWith())
+              .toList()));
     }
   }
 

@@ -302,11 +302,13 @@ class _ImageStylingState extends State<ImageStyling> {
                   divisions: 100,
                   activeColor: const Color(0xFF5E5CE6),
                   onChanged: (value) {
-                    BlocProvider.of<LogicBloc>(context)
-                        .add(UpdateBorderRadiusEvent(borderRadius: value.toString()));
+                    BlocProvider.of<LogicBloc>(context).add(
+                        UpdateBorderRadiusEvent(
+                            borderRadius: value.toString()));
                     setState(() {
                       _borderRadius = value;
-                      _borderRadiusController.text = _borderRadius.toStringAsFixed(1);
+                      _borderRadiusController.text =
+                          _borderRadius.toStringAsFixed(1);
                     });
                   },
                 ),
@@ -332,7 +334,7 @@ class _ImageStylingState extends State<ImageStyling> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide:
-                    const BorderSide(color: Color(0xFF8E8E93), width: 2),
+                        const BorderSide(color: Color(0xFF8E8E93), width: 2),
                   ),
                 ),
                 textAlign: TextAlign.center,
@@ -448,6 +450,10 @@ class _ImageStylingState extends State<ImageStyling> {
                                   color: Color(0xFF8E8E93), width: 2),
                             ),
                           ),
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                            UpdateImageUrlEvent(imageUrl: value),
+                          ),
                         ),
                       ),
                     ],
@@ -486,7 +492,11 @@ class _ImageStylingState extends State<ImageStyling> {
                             colorFilter: const ColorFilter.mode(
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.contain),
+                            );
+                          },
                           hoverColor: Colors.grey[700],
                         ),
                         IconButton(
@@ -499,7 +509,11 @@ class _ImageStylingState extends State<ImageStyling> {
                             colorFilter: const ColorFilter.mode(
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.cover),
+                            );
+                          },
                           hoverColor: Colors.grey[700],
                         ),
                         IconButton(
@@ -512,7 +526,11 @@ class _ImageStylingState extends State<ImageStyling> {
                             colorFilter: const ColorFilter.mode(
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.fill),
+                            );
+                          },
                           hoverColor: Colors.grey[700],
                         ),
                         IconButton(
@@ -526,7 +544,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.fitWidth),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
@@ -541,7 +561,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.fitHeight),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
@@ -556,7 +578,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.none),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
@@ -571,7 +595,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.scaleDown),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
