@@ -117,6 +117,7 @@ class _ImageStylingState extends State<ImageStyling> {
                 ),
               ),
             ),
+            const SizedBox(width: 10),
             Flexible(
               flex: 1,
               fit: FlexFit.loose,
@@ -288,24 +289,33 @@ class _ImageStylingState extends State<ImageStyling> {
         // Slider and text field for border radius...
         Row(
           children: [
-            Expanded(
-              child: Slider(
-                value: _borderRadius,
-                min: 0.0,
-                max: 50.0,
-                divisions: 100,
-                activeColor: Color(0xFF5E5CE6),
-                onChanged: (value) {
-                  setState(() {
-                    _borderRadius = value;
-                    _borderRadiusController.text =
-                        _borderRadius.toStringAsFixed(1);
-                  });
-                },
+            Flexible(
+              flex: 4,
+              fit: FlexFit.tight,
+              child: SliderTheme(
+                data: SliderThemeData(
+                    overlayShape: SliderComponentShape.noOverlay),
+                child: Slider(
+                  value: _borderRadius,
+                  min: 0.0,
+                  max: 50.0,
+                  divisions: 100,
+                  activeColor: const Color(0xFF5E5CE6),
+                  onChanged: (value) {
+                    BlocProvider.of<LogicBloc>(context)
+                        .add(UpdateBorderRadiusEvent(borderRadius: value.toString()));
+                    setState(() {
+                      _borderRadius = value;
+                      _borderRadiusController.text = _borderRadius.toStringAsFixed(1);
+                    });
+                  },
+                ),
               ),
             ),
-            SizedBox(
-              width: 50,
+            const SizedBox(width: 10),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
               child: TextFormField(
                 controller: _borderRadiusController,
                 style: const TextStyle(fontSize: 14, color: Colors.white),
@@ -322,7 +332,7 @@ class _ImageStylingState extends State<ImageStyling> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide:
-                        const BorderSide(color: Color(0xFF8E8E93), width: 2),
+                    const BorderSide(color: Color(0xFF8E8E93), width: 2),
                   ),
                 ),
                 textAlign: TextAlign.center,
@@ -331,7 +341,7 @@ class _ImageStylingState extends State<ImageStyling> {
                     double? newValue = double.tryParse(value);
                     if (newValue != null &&
                         newValue >= 0.0 &&
-                        newValue <= 50.0) {
+                        newValue <= 1.0) {
                       _borderRadius = newValue;
                     }
                   });
