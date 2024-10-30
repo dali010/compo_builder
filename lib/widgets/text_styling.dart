@@ -62,7 +62,7 @@ class _TextStylingState extends State<TextStyling> {
   String selectedFontFamily = 'Roboto';
   String selectedFontWeight = 'Normal';
 
-  Color selectedColor = Colors.black; // Default text color
+  Color selectedColor = Colors.black;
 
   // Method to show color picker
   void pickColor(BuildContext context) {
