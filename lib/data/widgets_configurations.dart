@@ -123,7 +123,7 @@ class ImageConfiguration extends CustomConfiguration {
       {this.opacity = 1,
       this.width = 100,
       this.height = 100,
-      this.borderRadius,
+      this.borderRadius = const BorderRadius.all(Radius.circular(0)),
       this.boxFit = BoxFit.cover,
       String? imageUrl})
       : imageUrl = imageUrl ??
@@ -133,7 +133,7 @@ class ImageConfiguration extends CustomConfiguration {
     double? opacity,
     double? width,
     double? height,
-    BorderRadius? borderRadius,
+    double? borderRadius,
     BoxFit? boxFit,
     String? imageUrl,
   }) {
@@ -141,7 +141,9 @@ class ImageConfiguration extends CustomConfiguration {
         opacity: opacity ?? this.opacity,
         width: width ?? this.width,
         height: height ?? this.height,
-        borderRadius: borderRadius ?? this.borderRadius,
+        borderRadius: borderRadius == null
+            ? this.borderRadius
+            : BorderRadius.all(Radius.circular(borderRadius)),
         boxFit: boxFit ?? this.boxFit,
         imageUrl: imageUrl ?? this.imageUrl);
   }
