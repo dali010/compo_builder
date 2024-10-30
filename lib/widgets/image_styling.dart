@@ -368,78 +368,73 @@ class _ImageStylingState extends State<ImageStyling> {
                   ),
                   const SizedBox(height: 10),
                   // Box fit icons...
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[900],
-                          borderRadius: BorderRadius.circular(8),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/contain.svg'),
+                          onPressed: () {},
+                          hoverColor: Colors.grey[700],
                         ),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/contain.svg'),
-                              onPressed: () {},
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/cover.svg'),
-                              onPressed: () {},
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fill.svg'),
-                              onPressed: () {},
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fitWidth.svg'),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fitHeight.svg'),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/none.svg'),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/scaleDown.svg'),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                          ],
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/cover.svg'),
+                          onPressed: () {},
+                          hoverColor: Colors.grey[700],
                         ),
-                      ),
-                    ],
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fill.svg'),
+                          onPressed: () {},
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fitWidth.svg'),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/fitHeight.svg'),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/none.svg'),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(width: 25, height: 25, 'assets/icons/scaleDown.svg'),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
