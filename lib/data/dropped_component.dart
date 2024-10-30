@@ -1,5 +1,6 @@
 import 'package:compo_builder/data/text_configuration.dart';
 import 'package:compo_builder/data/widget_type.dart';
+import 'package:compo_builder/widgets/text_styling.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -31,13 +32,39 @@ class DroppedComponent extends Equatable {
       bool? isSelected,
       Widget? widget,
       CustomConfiguration? configuration}) {
-    TextConfiguration? textConfiguration = (configuration as TextConfiguration?);
+    TextConfiguration? textConfiguration =
+        (configuration as TextConfiguration?);
     return DroppedComponent(
       type: type ?? this.type,
       isSelected: isSelected ?? this.isSelected,
-      widget: widget ?? (textConfiguration != null
+      widget: widget ??
+          (textConfiguration != null
               ? this.type == WidgetType.text
-                  ? Text(textConfiguration.text, style: TextStyle(color: textConfiguration.color, fontWeight: textConfiguration.fontWeight),)
+                  ? Text(
+                      textConfiguration.text,
+                      textAlign: textConfiguration.textAlign,
+                      maxLines: textConfiguration.maxLines,
+                      style: TextStyle(
+                          color: textConfiguration.color,
+                          fontWeight: textConfiguration.fontWeight,
+                          fontSize: textConfiguration.fontSize,
+                          decoration: textConfiguration.fontStyle ==
+                                  FontStyles.underline
+                              ? TextDecoration.underline
+                              : textConfiguration.fontStyle ==
+                                      FontStyles.lineThrough
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                          fontStyle: textConfiguration.fontStyle ==
+                                  FontStyles.normal
+                              ? FontStyle.normal
+                              : textConfiguration.fontStyle == FontStyles.italic
+                                  ? FontStyle.italic
+                                  : null,
+                          height: textConfiguration.lineHeight,
+                          letterSpacing: textConfiguration.letterSpacing
+                      ),
+                    )
                   : this.widget
               : this.widget),
       configuration: configuration ?? this.configuration,

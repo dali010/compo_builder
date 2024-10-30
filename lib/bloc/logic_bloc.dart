@@ -75,6 +75,82 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
                                   getFontWeightFromString(event.fontWeight)))
                   : component.copyWith())
               .toList()));
+    } else if (event is UpdateFontSizeEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as TextConfiguration)
+                              .copyWith(
+                                  fontSize: event.fontSize.isNotEmpty
+                                      ? double.parse(event.fontSize)
+                                      : 14,
+                                  fontSizeValue: event.fontSize))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateFontStyleEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as TextConfiguration)
+                              .copyWith(fontStyle: event.fontStyle))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateTextAlignEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as TextConfiguration)
+                              .copyWith(textAlign: event.textAlign))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateLineHeightEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as TextConfiguration)
+                              .copyWith(
+                                  lineHeight: event.lineHeight.isNotEmpty
+                                      ? double.parse(event.lineHeight)
+                                      : null,
+                                  lineHeightValue: event.lineHeight))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateLetterSpacingEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as TextConfiguration)
+                              .copyWith(
+                                  letterSpacing: event.letterSpacing.isNotEmpty
+                                      ? double.parse(event.letterSpacing)
+                                      : null,
+                                  letterSpacingValue: event.letterSpacing))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateMaxLinesEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as TextConfiguration)
+                  .copyWith(
+                  maxLines: event.maxLines.isNotEmpty
+                      ? int.parse(event.maxLines)
+                      : null,
+                  maxLinesValue: event.maxLines))
+              : component.copyWith())
+              .toList()));
     }
   }
 

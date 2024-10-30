@@ -1,37 +1,59 @@
 import 'package:compo_builder/bloc/logic_bloc.dart';
 import 'package:compo_builder/data/text_configuration.dart';
+import 'package:compo_builder/widgets/font_styling.dart';
+import 'package:compo_builder/widgets/text_align_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../bloc/text_events.dart';
-import '../data/dropped_component.dart';
+
+enum FontStyles { normal, italic, underline, lineThrough }
 
 class TextStyling extends StatefulWidget {
   final TextConfiguration configuration;
 
-  const TextStyling({
-    super.key,
-    required this.configuration
-  });
+  const TextStyling({super.key, required this.configuration});
 
   @override
   State<TextStyling> createState() => _TextStylingState();
 }
 
 class _TextStylingState extends State<TextStyling> {
+  late final TextEditingController _editingController;
+  late final TextEditingController _editingColorController;
+  late final TextEditingController _editingFontSizeController;
+  late final TextEditingController _editingLineHeightController;
+  late final TextEditingController _editingLetterSpacingController;
+  late final TextEditingController _editingMaxLinesController;
 
-  final TextEditingController _editingController =
-  TextEditingController(text: 'Hello World');
+  @override
+  void initState() {
+    _editingColorController = TextEditingController(
+        text:
+            '#${widget.configuration.color.value.toRadixString(16).substring(2)}');
+    _editingFontSizeController =
+        TextEditingController(text: widget.configuration.fontSizeValue);
+    _editingController = TextEditingController(text: widget.configuration.text);
+    _editingLineHeightController =
+        TextEditingController(text: widget.configuration.lineHeightValue);
+    _editingLetterSpacingController =
+        TextEditingController(text: widget.configuration.letterSpacingValue);
+    _editingMaxLinesController =
+        TextEditingController(text: widget.configuration.maxLinesValue);
+
+    super.initState();
+  }
 
   @override
   void didUpdateWidget(covariant TextStyling oldWidget) {
-    if(oldWidget.configuration != widget.configuration) {
+    if (oldWidget.configuration != widget.configuration) {
       _editingController.text = widget.configuration.text;
-      setState(() {
-        currentColor = widget.configuration.color;
-      });
+      _editingFontSizeController.text = widget.configuration.fontSizeValue;
+      _editingLineHeightController.text = widget.configuration.lineHeightValue;
+      setState(() {});
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -39,10 +61,7 @@ class _TextStylingState extends State<TextStyling> {
   String selectedTextStyle = 'Regular';
   String selectedFontFamily = 'Roboto';
   String selectedFontWeight = 'Normal';
-  String selectedFontStyle = 'None';
 
-  String fontSize = '14'; // Font size input
-  Color currentColor = Colors.black; // Default text color
   Color selectedColor = Colors.black; // Default text color
 
   // Method to show color picker
@@ -54,7 +73,7 @@ class _TextStylingState extends State<TextStyling> {
           title: const Text('Pick a color'),
           content: SingleChildScrollView(
             child: BlockPicker(
-              pickerColor: currentColor,
+              pickerColor: widget.configuration.color,
               onColorChanged: (Color color) {
                 setState(() {
                   selectedColor = color; // Update the selected color
@@ -66,9 +85,11 @@ class _TextStylingState extends State<TextStyling> {
             TextButton(
               child: const Text('Select'),
               onPressed: () {
-                BlocProvider.of<LogicBloc>(context).add(UpdateColorEvent(color: selectedColor));
+                BlocProvider.of<LogicBloc>(context)
+                    .add(UpdateColorEvent(color: selectedColor));
                 setState(() {
-                  currentColor = selectedColor; // Update the selected color
+                  _editingColorController.text =
+                      '#${selectedColor.value.toRadixString(16).substring(2)}';
                 });
                 Navigator.of(context).pop(); // Close the color picker
               },
@@ -106,7 +127,6 @@ class _TextStylingState extends State<TextStyling> {
     '800',
     '900'
   ];
-  final List<String> fontStyles = ['None', 'Italic', 'Underline'];
 
   @override
   Widget build(BuildContext context) {
@@ -117,10 +137,7 @@ class _TextStylingState extends State<TextStyling> {
         TextFormField(
           controller: _editingController,
           style: const TextStyle(
-            fontSize: 12,
-            color: Colors.white,
-            fontWeight: FontWeight.w100
-          ),
+              fontSize: 12, color: Colors.white, fontWeight: FontWeight.w100),
           decoration: InputDecoration(
             labelStyle: const TextStyle(
               color: Colors.white,
@@ -152,7 +169,6 @@ class _TextStylingState extends State<TextStyling> {
             ),
           ),
           onChanged: (value) {
-            print('dfkjshkjdshfjkdsf $value');
             BlocProvider.of<LogicBloc>(context).add(UpdateTextValueEvent(
               newText: value,
             ));
@@ -349,7 +365,8 @@ class _TextStylingState extends State<TextStyling> {
                       );
                     }).toList(),
                     onChanged: (newValue) {
-                      BlocProvider.of<LogicBloc>(context).add(UpdateFontWeightEvent(
+                      BlocProvider.of<LogicBloc>(context)
+                          .add(UpdateFontWeightEvent(
                         fontWeight: newValue!,
                       ));
                       setState(() {
@@ -397,86 +414,40 @@ class _TextStylingState extends State<TextStyling> {
                 Row(
                   children: [
                     // Italic button
-                    SizedBox(
-                      width: 30,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedFontStyle = 'Italic';
-                          });
+                    FontStyling(
+                        onTap: (unselect) {
+                          BlocProvider.of<LogicBloc>(context).add(
+                              UpdateFontStyleEvent(
+                                  fontStyle: unselect
+                                      ? FontStyles.normal
+                                      : FontStyles.italic));
                         },
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          backgroundColor: selectedFontStyle == 'Italic'
-                              ? Colors.grey
-                              : const Color(0xFF2E3741),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              bottomLeft: Radius.circular(8),
-                            ),
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.format_italic,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    // Underline button
-                    SizedBox(
-                      width: 30,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedFontStyle = 'Underline';
-                          });
+                        isFirst: true,
+                        fontStyle: FontStyles.italic,
+                        isSelected: widget.configuration.fontStyle ==
+                            FontStyles.italic),
+                    FontStyling(
+                        onTap: (unselect) {
+                          BlocProvider.of<LogicBloc>(context).add(
+                              UpdateFontStyleEvent(
+                                  fontStyle: unselect
+                                      ? FontStyles.normal
+                                      : FontStyles.underline));
                         },
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          backgroundColor: selectedFontStyle == 'Underline'
-                              ? Colors.grey
-                              : const Color(0xFF2E3741),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.format_underline,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    // Strikethrough button
-                    SizedBox(
-                      width: 30,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedFontStyle = 'Strikethrough';
-                          });
+                        fontStyle: FontStyles.underline,
+                        isSelected: widget.configuration.fontStyle ==
+                            FontStyles.underline),
+                    FontStyling(
+                        onTap: (unselect) {
+                          BlocProvider.of<LogicBloc>(context).add(
+                              UpdateFontStyleEvent(
+                                  fontStyle: unselect
+                                      ? FontStyles.normal
+                                      : FontStyles.lineThrough));
                         },
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          backgroundColor: selectedFontStyle == 'Strikethrough'
-                              ? Colors.grey
-                              : const Color(0xFF2E3741),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(8),
-                              bottomRight: Radius.circular(8),
-                            ),
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.format_strikethrough,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                        fontStyle: FontStyles.lineThrough,
+                        isSelected: widget.configuration.fontStyle ==
+                            FontStyles.lineThrough)
                   ],
                 ),
               ],
@@ -512,17 +483,14 @@ class _TextStylingState extends State<TextStyling> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    initialValue: fontSize,
+                    controller: _editingFontSizeController,
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                     keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      setState(() {
-                        fontSize = value; // Update the font size
-                      });
-                    },
+                    onChanged: (value) => BlocProvider.of<LogicBloc>(context)
+                        .add(UpdateFontSizeEvent(fontSize: value)),
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xFF2E3741).withOpacity(0.8),
@@ -575,8 +543,7 @@ class _TextStylingState extends State<TextStyling> {
                       // TextField for hex color input
                       Expanded(
                         child: TextFormField(
-                          initialValue:
-                              '#${currentColor.value.toRadixString(16).substring(2)}',
+                          controller: _editingColorController,
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -586,15 +553,21 @@ class _TextStylingState extends State<TextStyling> {
                               // Ensure the value starts with a '#' and is a valid hex color
                               if (value.startsWith('#') && value.length == 7) {
                                 try {
-                                  currentColor = Color(
-                                      int.parse(value.substring(1), radix: 16) +
-                                          0xFF000000);
+                                  BlocProvider.of<LogicBloc>(context).add(
+                                      UpdateColorEvent(
+                                          color: Color(int.parse(
+                                                  value.substring(1),
+                                                  radix: 16) +
+                                              0xFF000000)));
                                 } catch (e) {
                                   // Handle invalid hex input
                                 }
                               }
                             });
                           },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(7),
+                          ],
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: const Color(0xFF2E3741).withOpacity(0.8),
@@ -623,7 +596,8 @@ class _TextStylingState extends State<TextStyling> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: currentColor, // Show selected color
+                            color: widget.configuration.color,
+                            // Show selected color
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: const Color(0xFF8E8E93),
@@ -673,15 +647,14 @@ class _TextStylingState extends State<TextStyling> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    initialValue: '1.0',
+                    controller: _editingLineHeightController,
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                     keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      // Update the line height
-                    },
+                    onChanged: (value) => BlocProvider.of<LogicBloc>(context)
+                        .add(UpdateLineHeightEvent(lineHeight: value)),
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xFF2E3741).withOpacity(0.8),
@@ -734,15 +707,14 @@ class _TextStylingState extends State<TextStyling> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    initialValue: '0.0',
+                    controller: _editingLetterSpacingController,
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                     keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      // Update the letter spacing
-                    },
+                    onChanged: (value) => BlocProvider.of<LogicBloc>(context)
+                        .add(UpdateLetterSpacingEvent(letterSpacing: value)),
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xFF2E3741).withOpacity(0.8),
@@ -788,91 +760,51 @@ class _TextStylingState extends State<TextStyling> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Left Align button
-                      Container(
-                        width: 30,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF2E3741),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft: Radius.circular(8),
-                          ),
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            // Align text to the left
-                          },
-                          icon: const Icon(
-                            Icons.format_align_left,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          padding: EdgeInsets.zero,
-                          splashRadius: 15,
-                        ),
-                      ),
+                      TextAlignWidget(
+                          onTap: (unselect) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                                  UpdateTextAlignEvent(
+                                      textAlign: unselect
+                                          ? TextAlign.start
+                                          : TextAlign.left)),
+                          iconData: Icons.format_align_left,
+                          isFirst: true,
+                          isSelected:
+                              widget.configuration.textAlign == TextAlign.left),
                       // Center Align button
-                      Container(
-                        width: 30,
-                        height: 40,
-                        color: const Color(0xFF2E3741),
-                        child: IconButton(
-                          onPressed: () {
-                            // Align text to the center
-                          },
-                          icon: const Icon(
-                            Icons.format_align_center,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          padding: EdgeInsets.zero,
-                          splashRadius: 15,
-                        ),
-                      ),
+                      TextAlignWidget(
+                          onTap: (unselect) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                                  UpdateTextAlignEvent(
+                                      textAlign: unselect
+                                          ? TextAlign.start
+                                          : TextAlign.center)),
+                          iconData: Icons.format_align_center,
+                          isSelected: widget.configuration.textAlign ==
+                              TextAlign.center),
                       // Right Align button
-                      Container(
-                        width: 30,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF2E3741),
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            // Justify text alignment
-                          },
-                          icon: const Icon(
-                            Icons.format_align_right,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          padding: EdgeInsets.zero,
-                          splashRadius: 15,
-                        ),
-                      ),
+                      TextAlignWidget(
+                          onTap: (unselect) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                                  UpdateTextAlignEvent(
+                                      textAlign: unselect
+                                          ? TextAlign.start
+                                          : TextAlign.right)),
+                          iconData: Icons.format_align_right,
+                          isSelected: widget.configuration.textAlign ==
+                              TextAlign.right),
                       // Justify Align button
-                      Container(
-                        width: 30,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF2E3741),
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(8),
-                            bottomRight: Radius.circular(8),
-                          ),
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            // Align text to the right
-                          },
-                          icon: const Icon(
-                            Icons.format_align_justify,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          padding: EdgeInsets.zero,
-                          splashRadius: 15,
-                        ),
-                      ),
+                      TextAlignWidget(
+                          onTap: (unselect) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                                  UpdateTextAlignEvent(
+                                      textAlign: unselect
+                                          ? TextAlign.start
+                                          : TextAlign.justify)),
+                          iconData: Icons.format_align_right,
+                          isLast: true,
+                          isSelected: widget.configuration.textAlign ==
+                              TextAlign.justify),
                     ],
                   ),
                 ],
@@ -911,15 +843,14 @@ class _TextStylingState extends State<TextStyling> {
                   SizedBox(
                     height: 40, // Adjust the height of the text field
                     child: TextFormField(
-                      initialValue: '1',
+                      controller: _editingMaxLinesController,
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
                       ),
                       keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        // Update the max lines
-                      },
+                      onChanged: (value) => BlocProvider.of<LogicBloc>(context)
+                          .add(UpdateMaxLinesEvent(maxLines: value)),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: const Color(0xFF2E3741).withOpacity(0.8),
