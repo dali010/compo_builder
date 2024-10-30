@@ -177,6 +177,26 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
                               .copyWith(opacity: event.opacity))
                   : component.copyWith())
               .toList()));
+    } else if (event is UpdateWidthEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(width: double.tryParse(event.width)))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateHeightEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(height: double.tryParse(event.height)))
+                  : component.copyWith())
+              .toList()));
     }
   }
 

@@ -10,7 +10,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../bloc/logic_bloc.dart';
 import '../bloc/text_events.dart';
-import '../data/text_configuration.dart';
+import '../data/widgets_configurations.dart';
 import 'font_styling.dart';
 
 class ButtonStyling extends StatefulWidget {

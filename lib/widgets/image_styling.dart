@@ -1,10 +1,13 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:compo_builder/bloc/image_events.dart';
 import 'package:compo_builder/bloc/logic_bloc.dart';
 import 'package:compo_builder/data/widgets_configurations.dart' as wg;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ImageStyling extends StatefulWidget {
   final wg.ImageConfiguration configuration;
@@ -23,6 +26,8 @@ class _ImageStylingState extends State<ImageStyling> {
   late TextEditingController _heightController;
   late TextEditingController _borderRadiusController;
   String _imageType = 'Network';
+  String? _imagePath;
+  File? backgroundImage;
 
   @override
   void initState() {
@@ -35,6 +40,19 @@ class _ImageStylingState extends State<ImageStyling> {
         TextEditingController(text: widget.configuration.height.toString());
     _borderRadiusController =
         TextEditingController(text: _borderRadius.toStringAsFixed(1));
+  }
+
+  Future<void> _pickImage() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'svg'],
+    );
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        backgroundImage = File(result.files.first.path!);
+        print('Image path: ${result.files.first.path}');
+      });
+    }
   }
 
   @override
@@ -188,6 +206,9 @@ class _ImageStylingState extends State<ImageStyling> {
                             ),
                           ),
                           textAlign: TextAlign.center,
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context)
+                                  .add(UpdateWidthEvent(width: value)),
                         ),
                       ),
                     ],
@@ -237,6 +258,10 @@ class _ImageStylingState extends State<ImageStyling> {
                             ),
                           ),
                           textAlign: TextAlign.center,
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                            UpdateHeightEvent(height: value),
+                          ),
                         ),
                       ),
                     ],
@@ -358,20 +383,15 @@ class _ImageStylingState extends State<ImageStyling> {
           ),
         ),
         const SizedBox(height: 10),
-        // Conditionally render the import button for Asset type
+        // Import Picture button for Asset type selection
         if (_imageType == 'Asset')
           ElevatedButton(
-            onPressed: () async {
-              final ImagePicker _picker = ImagePicker();
-              final XFile? image =
-                  await _picker.pickImage(source: ImageSource.gallery);
-              if (image != null) {
-                // Handle the selected image
-                print('Image path: ${image.path}');
-              }
-            },
+            onPressed: _pickImage,
             child: const Text('Import Picture'),
           ),
+
+        if (_imagePath != null) Image.file(File(_imagePath!)),
+
         const SizedBox(height: 10),
         // Image URL input field...
         Row(
