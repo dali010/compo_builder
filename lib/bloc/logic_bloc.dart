@@ -1,7 +1,9 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:compo_builder/bloc/image_events.dart';
 import 'package:compo_builder/bloc/text_events.dart';
 import 'package:compo_builder/data/component.dart';
-import 'package:compo_builder/data/text_configuration.dart';
 import 'package:compo_builder/data/widget_type.dart';
+import 'package:compo_builder/data/widgets_configurations.dart' as wg;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +19,8 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
     on<LogicEvent>((event, emit) {});
     on<OnDropComponentEvent>(_onDropComponent);
     on<OnSelectDroppedComponentEvent>(_onSelectDroppedComponent);
-    on<UpdateTextEvent>(_onUpdateText);
+    on<UpdateTextEvent>(_onUpdateText, transformer: restartable());
+    on<UpdateImageEvent>(_onUpdateImage);
   }
 
   void _onDropComponent(OnDropComponentEvent event, Emitter<LogicState> emit) {
@@ -26,10 +29,19 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
         .toList();
     emit(state.copyWith(droppedComponents: [
       ...unselectedList,
-      DroppedComponent(
-        type: event.droppedComponentTitle,
-      )
+      DroppedComponent(type: event.droppedComponentTitle)
     ]));
+    if (event.droppedComponentTitle == WidgetType.image) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith())
+                  : component.copyWith())
+              .toList()));
+    }
   }
 
   void _onSelectDroppedComponent(
@@ -49,7 +61,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration:
-                          (component.configuration as TextConfiguration)
+                          (component.configuration as wg.TextConfiguration)
                               .copyWith(text: event.newText))
                   : component.copyWith())
               .toList()));
@@ -59,7 +71,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration:
-                          (component.configuration as TextConfiguration)
+                          (component.configuration as wg.TextConfiguration)
                               .copyWith(color: event.color))
                   : component.copyWith())
               .toList()));
@@ -69,7 +81,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration: (component.configuration
-                              as TextConfiguration)
+                              as wg.TextConfiguration)
                           .copyWith(
                               fontWeight:
                                   getFontWeightFromString(event.fontWeight)))
@@ -81,7 +93,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration:
-                          (component.configuration as TextConfiguration)
+                          (component.configuration as wg.TextConfiguration)
                               .copyWith(
                                   fontSize: event.fontSize.isNotEmpty
                                       ? double.parse(event.fontSize)
@@ -95,7 +107,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration:
-                          (component.configuration as TextConfiguration)
+                          (component.configuration as wg.TextConfiguration)
                               .copyWith(fontStyle: event.fontStyle))
                   : component.copyWith())
               .toList()));
@@ -105,7 +117,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration:
-                          (component.configuration as TextConfiguration)
+                          (component.configuration as wg.TextConfiguration)
                               .copyWith(textAlign: event.textAlign))
                   : component.copyWith())
               .toList()));
@@ -115,7 +127,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration:
-                          (component.configuration as TextConfiguration)
+                          (component.configuration as wg.TextConfiguration)
                               .copyWith(
                                   lineHeight: event.lineHeight.isNotEmpty
                                       ? double.parse(event.lineHeight)
@@ -129,7 +141,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
               .map((component) => component.isSelected
                   ? component.copyWith(
                       configuration:
-                          (component.configuration as TextConfiguration)
+                          (component.configuration as wg.TextConfiguration)
                               .copyWith(
                                   letterSpacing: event.letterSpacing.isNotEmpty
                                       ? double.parse(event.letterSpacing)
@@ -141,15 +153,29 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
               .map((component) => component.isSelected
-              ? component.copyWith(
-              configuration:
-              (component.configuration as TextConfiguration)
-                  .copyWith(
-                  maxLines: event.maxLines.isNotEmpty
-                      ? int.parse(event.maxLines)
-                      : null,
-                  maxLinesValue: event.maxLines))
-              : component.copyWith())
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.TextConfiguration)
+                              .copyWith(
+                                  maxLines: event.maxLines.isNotEmpty
+                                      ? int.parse(event.maxLines)
+                                      : null,
+                                  maxLinesValue: event.maxLines))
+                  : component.copyWith())
+              .toList()));
+    }
+  }
+
+  void _onUpdateImage(UpdateImageEvent event, Emitter<LogicState> emit) {
+    if (event is UpdateOpacityEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(opacity: event.opacity))
+                  : component.copyWith())
               .toList()));
     }
   }
