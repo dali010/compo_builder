@@ -1,16 +1,18 @@
-import 'package:flutter/cupertino.dart';
+import 'package:compo_builder/bloc/image_events.dart';
+import 'package:compo_builder/bloc/logic_bloc.dart';
+import 'package:compo_builder/data/widgets_configurations.dart' as wg;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageStyling extends StatefulWidget {
-  final int componentIndex;
+  final wg.ImageConfiguration configuration;
 
-  const ImageStyling({Key? key, required this.componentIndex})
-      : super(key: key);
+  const ImageStyling({super.key, required this.configuration});
 
   @override
-  _ImageStylingState createState() => _ImageStylingState();
+  State<ImageStyling> createState() => _ImageStylingState();
 }
 
 class _ImageStylingState extends State<ImageStyling> {
@@ -27,8 +29,10 @@ class _ImageStylingState extends State<ImageStyling> {
     super.initState();
     _opacityController =
         TextEditingController(text: _opacity.toStringAsFixed(1));
-    _widthController = TextEditingController(text: "178");
-    _heightController = TextEditingController(text: "200");
+    _widthController =
+        TextEditingController(text: widget.configuration.width.toString());
+    _heightController =
+        TextEditingController(text: widget.configuration.height.toString());
     _borderRadiusController =
         TextEditingController(text: _borderRadius.toStringAsFixed(1));
   }
@@ -40,6 +44,14 @@ class _ImageStylingState extends State<ImageStyling> {
     _heightController.dispose();
     _borderRadiusController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant ImageStyling oldWidget) {
+    if (oldWidget.configuration != widget.configuration) {
+      setState(() {});
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -64,23 +76,32 @@ class _ImageStylingState extends State<ImageStyling> {
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(
-              child: Slider(
-                value: _opacity,
-                min: 0.0,
-                max: 1.0,
-                divisions: 100,
-                activeColor: Color(0xFF5E5CE6),
-                onChanged: (value) {
-                  setState(() {
-                    _opacity = value;
-                    _opacityController.text = _opacity.toStringAsFixed(1);
-                  });
-                },
+            Flexible(
+              flex: 4,
+              fit: FlexFit.tight,
+              child: SliderTheme(
+                data: SliderThemeData(
+                    overlayShape: SliderComponentShape.noOverlay),
+                child: Slider(
+                  value: _opacity,
+                  min: 0.0,
+                  max: 1.0,
+                  divisions: 100,
+                  activeColor: const Color(0xFF5E5CE6),
+                  onChanged: (value) {
+                    BlocProvider.of<LogicBloc>(context)
+                        .add(UpdateOpacityEvent(opacity: value));
+                    setState(() {
+                      _opacity = value;
+                      _opacityController.text = _opacity.toStringAsFixed(1);
+                    });
+                  },
+                ),
               ),
             ),
-            SizedBox(
-              width: 50,
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
               child: TextFormField(
                 controller: _opacityController,
                 style: const TextStyle(fontSize: 14, color: Colors.white),
@@ -418,120 +439,114 @@ class _ImageStylingState extends State<ImageStyling> {
                   ),
                   const SizedBox(height: 10),
                   // Box fit icons...
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[900],
-                          borderRadius: BorderRadius.circular(8),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(
+                            width: 25,
+                            height: 25,
+                            'assets/icons/contain.svg',
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF8A97A2), BlendMode.modulate),
+                          ),
+                          onPressed: () {},
+                          hoverColor: Colors.grey[700],
                         ),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(
-                                width: 25,
-                                height: 25,
-                                'assets/icons/contain.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xFF8A97A2), BlendMode.modulate),
-                              ),
-                              onPressed: () {},
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(
-                                width: 25,
-                                height: 25,
-                                'assets/icons/cover.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xFF8A97A2), BlendMode.modulate),
-                              ),
-                              onPressed: () {},
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(
-                                width: 25,
-                                height: 25,
-                                'assets/icons/fill.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xFF8A97A2), BlendMode.modulate),
-                              ),
-                              onPressed: () {},
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(
-                                width: 25,
-                                height: 25,
-                                'assets/icons/fitWidth.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xFF8A97A2), BlendMode.modulate),
-                              ),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(
-                                width: 25,
-                                height: 25,
-                                'assets/icons/fitHeight.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xFF8A97A2), BlendMode.modulate),
-                              ),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(
-                                width: 25,
-                                height: 25,
-                                'assets/icons/none.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xFF8A97A2), BlendMode.modulate),
-                              ),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.all(5),
-                              icon: SvgPicture.asset(
-                                width: 25,
-                                height: 25,
-                                'assets/icons/scaleDown.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xFF8A97A2), BlendMode.modulate),
-                              ),
-                              onPressed: () {
-                                print('Face');
-                              },
-                              hoverColor: Colors.grey[700],
-                            ),
-                          ],
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(
+                            width: 25,
+                            height: 25,
+                            'assets/icons/cover.svg',
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF8A97A2), BlendMode.modulate),
+                          ),
+                          onPressed: () {},
+                          hoverColor: Colors.grey[700],
                         ),
-                      ),
-                    ],
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(
+                            width: 25,
+                            height: 25,
+                            'assets/icons/fill.svg',
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF8A97A2), BlendMode.modulate),
+                          ),
+                          onPressed: () {},
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(
+                            width: 25,
+                            height: 25,
+                            'assets/icons/fitWidth.svg',
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF8A97A2), BlendMode.modulate),
+                          ),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(
+                            width: 25,
+                            height: 25,
+                            'assets/icons/fitHeight.svg',
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF8A97A2), BlendMode.modulate),
+                          ),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(
+                            width: 25,
+                            height: 25,
+                            'assets/icons/none.svg',
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF8A97A2), BlendMode.modulate),
+                          ),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          padding: EdgeInsets.all(5),
+                          icon: SvgPicture.asset(
+                            width: 25,
+                            height: 25,
+                            'assets/icons/scaleDown.svg',
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF8A97A2), BlendMode.modulate),
+                          ),
+                          onPressed: () {
+                            print('Face');
+                          },
+                          hoverColor: Colors.grey[700],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

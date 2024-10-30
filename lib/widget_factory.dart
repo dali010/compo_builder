@@ -22,7 +22,7 @@ class WidgetFactory {
       case WidgetType.image:
         return CachedNetworkImage(
           imageUrl:
-              'https://picsum.photos/100?random=${DateTime.now().millisecondsSinceEpoch}',
+              '',
           placeholder: (context, url) => const SizedBox(
             height: 100,
             width: 100,

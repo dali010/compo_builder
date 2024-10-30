@@ -1,5 +1,5 @@
 import 'package:compo_builder/bloc/logic_bloc.dart';
-import 'package:compo_builder/data/text_configuration.dart';
+import 'package:compo_builder/data/widgets_configurations.dart';
 import 'package:compo_builder/widgets/font_styling.dart';
 import 'package:compo_builder/widgets/text_align_widget.dart';
 import 'package:flutter/material.dart';

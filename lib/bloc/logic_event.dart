@@ -12,6 +12,10 @@ class OnDropComponentEvent extends LogicEvent {
 abstract class UpdateTextEvent extends LogicEvent {
 }
 
+abstract class UpdateImageEvent extends LogicEvent {
+}
+
+
 class UpdateComponentColorEvent extends LogicEvent {
   final int componentIndex;
   final Color newColor;
