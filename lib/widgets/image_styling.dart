@@ -298,7 +298,7 @@ class _ImageStylingState extends State<ImageStyling> {
                 child: Slider(
                   value: _borderRadius,
                   min: 0.0,
-                  max: 50.0,
+                  max: 24.0,
                   divisions: 100,
                   activeColor: const Color(0xFF5E5CE6),
                   onChanged: (value) {
