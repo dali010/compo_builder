@@ -3,6 +3,7 @@ import 'package:compo_builder/data/widget_type.dart';
 import 'package:compo_builder/data/widgets_configurations.dart' as wg;
 import 'package:flutter/material.dart';
 
+import '../data/widgets_configurations.dart';
 import 'button_styling.dart'; // Import the new widget
 import 'container_styling.dart'; // Import the new widget
 import 'image_styling.dart'; // Import the new widget
