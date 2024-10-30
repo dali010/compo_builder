@@ -177,6 +177,57 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
                               .copyWith(opacity: event.opacity))
                   : component.copyWith())
               .toList()));
+    } else if (event is UpdateWidthEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(width: double.tryParse(event.width)))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateHeightEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(height: double.tryParse(event.height)))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateBorderRadiusEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(
+                                  borderRadius: double.tryParse(event.borderRadius)))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateImageUrlEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(imageUrl: event.imageUrl))
+                  : component.copyWith())
+              .toList()));
+    } else if (event is UpdateBoxFitEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) => component.isSelected
+                  ? component.copyWith(
+                      configuration:
+                          (component.configuration as wg.ImageConfiguration)
+                              .copyWith(boxFit: event.boxFit))
+                  : component.copyWith())
+              .toList()));
     }
   }
 

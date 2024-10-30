@@ -1,10 +1,13 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:compo_builder/bloc/image_events.dart';
 import 'package:compo_builder/bloc/logic_bloc.dart';
 import 'package:compo_builder/data/widgets_configurations.dart' as wg;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ImageStyling extends StatefulWidget {
   final wg.ImageConfiguration configuration;
@@ -23,6 +26,8 @@ class _ImageStylingState extends State<ImageStyling> {
   late TextEditingController _heightController;
   late TextEditingController _borderRadiusController;
   String _imageType = 'Network';
+  String? _imagePath;
+  File? backgroundImage;
 
   @override
   void initState() {
@@ -35,6 +40,19 @@ class _ImageStylingState extends State<ImageStyling> {
         TextEditingController(text: widget.configuration.height.toString());
     _borderRadiusController =
         TextEditingController(text: _borderRadius.toStringAsFixed(1));
+  }
+
+  Future<void> _pickImage() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'svg'],
+    );
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        backgroundImage = File(result.files.first.path!);
+        print('Image path: ${result.files.first.path}');
+      });
+    }
   }
 
   @override
@@ -99,6 +117,7 @@ class _ImageStylingState extends State<ImageStyling> {
                 ),
               ),
             ),
+            const SizedBox(width: 10),
             Flexible(
               flex: 1,
               fit: FlexFit.loose,
@@ -188,6 +207,9 @@ class _ImageStylingState extends State<ImageStyling> {
                             ),
                           ),
                           textAlign: TextAlign.center,
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context)
+                                  .add(UpdateWidthEvent(width: value)),
                         ),
                       ),
                     ],
@@ -237,6 +259,10 @@ class _ImageStylingState extends State<ImageStyling> {
                             ),
                           ),
                           textAlign: TextAlign.center,
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                            UpdateHeightEvent(height: value),
+                          ),
                         ),
                       ),
                     ],
@@ -263,24 +289,35 @@ class _ImageStylingState extends State<ImageStyling> {
         // Slider and text field for border radius...
         Row(
           children: [
-            Expanded(
-              child: Slider(
-                value: _borderRadius,
-                min: 0.0,
-                max: 50.0,
-                divisions: 100,
-                activeColor: Color(0xFF5E5CE6),
-                onChanged: (value) {
-                  setState(() {
-                    _borderRadius = value;
-                    _borderRadiusController.text =
-                        _borderRadius.toStringAsFixed(1);
-                  });
-                },
+            Flexible(
+              flex: 4,
+              fit: FlexFit.tight,
+              child: SliderTheme(
+                data: SliderThemeData(
+                    overlayShape: SliderComponentShape.noOverlay),
+                child: Slider(
+                  value: _borderRadius,
+                  min: 0.0,
+                  max: 24.0,
+                  divisions: 100,
+                  activeColor: const Color(0xFF5E5CE6),
+                  onChanged: (value) {
+                    BlocProvider.of<LogicBloc>(context).add(
+                        UpdateBorderRadiusEvent(
+                            borderRadius: value.toString()));
+                    setState(() {
+                      _borderRadius = value;
+                      _borderRadiusController.text =
+                          _borderRadius.toStringAsFixed(1);
+                    });
+                  },
+                ),
               ),
             ),
-            SizedBox(
-              width: 50,
+            const SizedBox(width: 10),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
               child: TextFormField(
                 controller: _borderRadiusController,
                 style: const TextStyle(fontSize: 14, color: Colors.white),
@@ -306,7 +343,7 @@ class _ImageStylingState extends State<ImageStyling> {
                     double? newValue = double.tryParse(value);
                     if (newValue != null &&
                         newValue >= 0.0 &&
-                        newValue <= 50.0) {
+                        newValue <= 1.0) {
                       _borderRadius = newValue;
                     }
                   });
@@ -358,20 +395,15 @@ class _ImageStylingState extends State<ImageStyling> {
           ),
         ),
         const SizedBox(height: 10),
-        // Conditionally render the import button for Asset type
+        // Import Picture button for Asset type selection
         if (_imageType == 'Asset')
           ElevatedButton(
-            onPressed: () async {
-              final ImagePicker _picker = ImagePicker();
-              final XFile? image =
-                  await _picker.pickImage(source: ImageSource.gallery);
-              if (image != null) {
-                // Handle the selected image
-                print('Image path: ${image.path}');
-              }
-            },
+            onPressed: _pickImage,
             child: const Text('Import Picture'),
           ),
+
+        if (_imagePath != null) Image.file(File(_imagePath!)),
+
         const SizedBox(height: 10),
         // Image URL input field...
         Row(
@@ -418,6 +450,10 @@ class _ImageStylingState extends State<ImageStyling> {
                                   color: Color(0xFF8E8E93), width: 2),
                             ),
                           ),
+                          onChanged: (value) =>
+                              BlocProvider.of<LogicBloc>(context).add(
+                            UpdateImageUrlEvent(imageUrl: value),
+                          ),
                         ),
                       ),
                     ],
@@ -456,7 +492,11 @@ class _ImageStylingState extends State<ImageStyling> {
                             colorFilter: const ColorFilter.mode(
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.contain),
+                            );
+                          },
                           hoverColor: Colors.grey[700],
                         ),
                         IconButton(
@@ -469,7 +509,11 @@ class _ImageStylingState extends State<ImageStyling> {
                             colorFilter: const ColorFilter.mode(
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.cover),
+                            );
+                          },
                           hoverColor: Colors.grey[700],
                         ),
                         IconButton(
@@ -482,7 +526,11 @@ class _ImageStylingState extends State<ImageStyling> {
                             colorFilter: const ColorFilter.mode(
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.fill),
+                            );
+                          },
                           hoverColor: Colors.grey[700],
                         ),
                         IconButton(
@@ -496,7 +544,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.fitWidth),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
@@ -511,7 +561,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.fitHeight),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
@@ -526,7 +578,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.none),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
@@ -541,7 +595,9 @@ class _ImageStylingState extends State<ImageStyling> {
                                 Color(0xFF8A97A2), BlendMode.modulate),
                           ),
                           onPressed: () {
-                            print('Face');
+                            BlocProvider.of<LogicBloc>(context).add(
+                              UpdateBoxFitEvent(boxFit: BoxFit.scaleDown),
+                            );
                           },
                           hoverColor: Colors.grey[700],
                         ),
