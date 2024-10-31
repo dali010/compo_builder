@@ -83,7 +83,6 @@ class _PhoneScreenState extends State<PhoneScreen> {
       );
     }, onWillAcceptWithDetails: (details) {
       return true;
-      ;
     }, onAcceptWithDetails: (details) {
       BlocProvider.of<LogicBloc>(context)
           .add(OnDropComponentEvent(droppedComponentTitle: details.data));

@@ -34,35 +34,37 @@ class _RightPanelState extends State<RightPanel> {
           width: 1.2,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Settings',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          const SizedBox(height: 20),
-          if (widget.selectedComponent != null) ...[
-            Text(
-              'Component: ${widget.selectedComponent!.type.value}',
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Settings',
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             const SizedBox(height: 20),
-            _buildComponentSettings(widget.selectedComponent),
-          ] else ...[
-            const Text(
-              'No component selected',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
-            ),
-          ]
-        ],
+            if (widget.selectedComponent != null) ...[
+              Text(
+                'Component: ${widget.selectedComponent!.type.value}',
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
+              const SizedBox(height: 20),
+              _buildComponentSettings(widget.selectedComponent),
+            ] else ...[
+              const Text(
+                'No component selected',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
+            ]
+          ],
+        ),
       ),
     );
   }
