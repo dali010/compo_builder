@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:file_selector/file_selector.dart';
 import 'package:compo_builder/bloc/image_events.dart';
 import 'package:compo_builder/bloc/logic_bloc.dart';
 import 'package:compo_builder/data/widgets_configurations.dart' as wg;
@@ -450,10 +449,12 @@ class _ImageStylingState extends State<ImageStyling> {
                                   color: Color(0xFF8E8E93), width: 2),
                             ),
                           ),
-                          onChanged: (value) =>
-                              BlocProvider.of<LogicBloc>(context).add(
-                            UpdateImageUrlEvent(imageUrl: value),
-                          ),
+                          onChanged: (value) {
+                            // print the image URL...
+                            print('Image URL: $value');
+                            BlocProvider.of<LogicBloc>(context)
+                                .add(UpdateImageUrlEvent(imageUrl: value));
+                          },
                         ),
                       ),
                     ],
