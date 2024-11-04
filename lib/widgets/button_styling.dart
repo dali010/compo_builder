@@ -15,7 +15,7 @@ import 'font_styling.dart';
 
 class ButtonStyling extends StatefulWidget {
   final int componentIndex;
-  final TextConfiguration configuration;
+  final ButtonConfiguration configuration;
 
   const ButtonStyling(
       {super.key, required this.componentIndex, required this.configuration});
@@ -27,6 +27,8 @@ class ButtonStyling extends StatefulWidget {
 class _ButtonStylingState extends State<ButtonStyling> {
   double _opacity = 0.7;
   late TextEditingController _opacityController;
+  late final TextEditingController _editingController;
+
   String selectedThemeStyle = 'Large';
   String selectedFontFamily = 'Roboto';
   String selectedFontWeight = 'Normal';
@@ -41,6 +43,7 @@ class _ButtonStylingState extends State<ButtonStyling> {
     super.initState();
     _opacityController =
         TextEditingController(text: _opacity.toStringAsFixed(1));
+    _editingController = TextEditingController(text: widget.configuration.text);
     _editingColorController = TextEditingController(
         text:
             '#${widget.configuration.color.value.toRadixString(16).substring(2)}');
@@ -55,6 +58,8 @@ class _ButtonStylingState extends State<ButtonStyling> {
   @override
   void didUpdateWidget(covariant ButtonStyling oldWidget) {
     if (oldWidget.configuration != widget.configuration) {
+      _opacityController.text = _opacity.toStringAsFixed(1);
+      _editingController.text = widget.configuration.text;
       _editingFontSizeController.text = widget.configuration.fontSizeValue;
       _editingLineHeightController.text = widget.configuration.lineHeightValue;
       setState(() {});
@@ -159,7 +164,7 @@ class _ButtonStylingState extends State<ButtonStyling> {
                 onChanged: (value) {
                   setState(() {
                     _opacity = value;
-                    _opacityController.text = _opacity.toStringAsFixed(1);
+                    _opacityController.text = value.toStringAsFixed(1);
                   });
                 },
               ),
@@ -215,6 +220,7 @@ class _ButtonStylingState extends State<ButtonStyling> {
         const SizedBox(height: 10),
         // Button text field...
         TextFormField(
+          controller: _editingController,
           style: const TextStyle(fontSize: 14, color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Button',
@@ -231,6 +237,11 @@ class _ButtonStylingState extends State<ButtonStyling> {
               borderSide: const BorderSide(color: Color(0xFF8E8E93), width: 2),
             ),
           ),
+          onChanged: (value) {
+            BlocProvider.of<LogicBloc>(context).add(UpdateTextValueEvent(
+              newText: value,
+            ));
+          },
         ),
         const SizedBox(height: 10),
 

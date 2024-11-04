@@ -15,6 +15,9 @@ abstract class UpdateTextEvent extends LogicEvent {
 abstract class UpdateImageEvent extends LogicEvent {
 }
 
+abstract class UpdateButtonEvent extends LogicEvent {
+}
+
 
 class UpdateComponentColorEvent extends LogicEvent {
   final int componentIndex;

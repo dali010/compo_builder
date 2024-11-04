@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants.dart' as constants;
 import '../data/dropped_component.dart';
+import 'button_events.dart';
 
 part 'logic_event.dart';
 part 'logic_state.dart';
@@ -21,6 +22,7 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
     on<OnSelectDroppedComponentEvent>(_onSelectDroppedComponent);
     on<UpdateTextEvent>(_onUpdateText, transformer: restartable());
     on<UpdateImageEvent>(_onUpdateImage);
+    on<UpdateButtonEvent>(_onUpdateButton);
   }
 
   void _onDropComponent(OnDropComponentEvent event, Emitter<LogicState> emit) {
@@ -34,23 +36,25 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
     if (event.droppedComponentTitle == WidgetType.image) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.ImageConfiguration)
-                              .copyWith())
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ImageConfiguration)
+                  .copyWith())
+              : component.copyWith())
               .toList()));
     }
   }
 
-  void _onSelectDroppedComponent(
-      OnSelectDroppedComponentEvent event, Emitter<LogicState> emit) {
+  void _onSelectDroppedComponent(OnSelectDroppedComponentEvent event,
+      Emitter<LogicState> emit) {
     emit(state.copyWith(
         droppedComponents: state.droppedComponents
-            .map((component) => component.id == event.id
-                ? component.copyWith(isSelected: !component.isSelected)
-                : component.copyWith(isSelected: false))
+            .map((component) =>
+        component.id == event.id
+            ? component.copyWith(isSelected: !component.isSelected)
+            : component.copyWith(isSelected: false))
             .toList()));
   }
 
@@ -58,110 +62,119 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
     if (event is UpdateTextValueEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(text: event.newText))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(text: event.newText))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateColorEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(color: event.color))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(color: event.color))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateFontWeightEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration: (component.configuration
-                              as wg.TextConfiguration)
-                          .copyWith(
-                              fontWeight:
-                                  getFontWeightFromString(event.fontWeight)))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration: (component.configuration
+              as wg.TextConfiguration)
+                  .copyWith(
+                  fontWeight:
+                  getFontWeightFromString(event.fontWeight)))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateFontSizeEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(
-                                  fontSize: event.fontSize.isNotEmpty
-                                      ? double.parse(event.fontSize)
-                                      : 14,
-                                  fontSizeValue: event.fontSize))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(
+                  fontSize: event.fontSize.isNotEmpty
+                      ? double.parse(event.fontSize)
+                      : 14,
+                  fontSizeValue: event.fontSize))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateFontStyleEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(fontStyle: event.fontStyle))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(fontStyle: event.fontStyle))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateTextAlignEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(textAlign: event.textAlign))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(textAlign: event.textAlign))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateLineHeightEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(
-                                  lineHeight: event.lineHeight.isNotEmpty
-                                      ? double.parse(event.lineHeight)
-                                      : null,
-                                  lineHeightValue: event.lineHeight))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(
+                  lineHeight: event.lineHeight.isNotEmpty
+                      ? double.parse(event.lineHeight)
+                      : null,
+                  lineHeightValue: event.lineHeight))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateLetterSpacingEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(
-                                  letterSpacing: event.letterSpacing.isNotEmpty
-                                      ? double.parse(event.letterSpacing)
-                                      : null,
-                                  letterSpacingValue: event.letterSpacing))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(
+                  letterSpacing: event.letterSpacing.isNotEmpty
+                      ? double.parse(event.letterSpacing)
+                      : null,
+                  letterSpacingValue: event.letterSpacing))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateMaxLinesEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.TextConfiguration)
-                              .copyWith(
-                                  maxLines: event.maxLines.isNotEmpty
-                                      ? int.parse(event.maxLines)
-                                      : null,
-                                  maxLinesValue: event.maxLines))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.TextConfiguration)
+                  .copyWith(
+                  maxLines: event.maxLines.isNotEmpty
+                      ? int.parse(event.maxLines)
+                      : null,
+                  maxLinesValue: event.maxLines))
+              : component.copyWith())
               .toList()));
     }
   }
@@ -200,36 +213,134 @@ class LogicBloc extends Bloc<LogicEvent, LogicState> {
     } else if (event is UpdateBorderRadiusEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.ImageConfiguration)
-                              .copyWith(
-                                  borderRadius: double.tryParse(event.borderRadius)))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ImageConfiguration)
+                  .copyWith(
+                  borderRadius: double.tryParse(event.borderRadius)))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateImageUrlEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.ImageConfiguration)
-                              .copyWith(imageUrl: event.imageUrl))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ImageConfiguration)
+                  .copyWith(imageUrl: event.imageUrl))
+              : component.copyWith())
               .toList()));
     } else if (event is UpdateBoxFitEvent) {
       emit(state.copyWith(
           droppedComponents: state.droppedComponents
-              .map((component) => component.isSelected
-                  ? component.copyWith(
-                      configuration:
-                          (component.configuration as wg.ImageConfiguration)
-                              .copyWith(boxFit: event.boxFit))
-                  : component.copyWith())
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ImageConfiguration)
+                  .copyWith(boxFit: event.boxFit))
+              : component.copyWith())
               .toList()));
     }
   }
+
+  // update button configuration...
+  void _onUpdateButton(UpdateButtonEvent event, Emitter<LogicState> emit) {
+    if (event is UpdateButtonTextValueEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ButtonConfiguration)
+                  .copyWith(text: event.newText))
+              : component.copyWith())
+              .toList()));
+    } else if (event is UpdateButtonColorEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ButtonConfiguration)
+                  .copyWith(color: event.color))
+              : component.copyWith())
+              .toList()));
+    }
+
+
+   else if (event is UpdateButtonColorEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ButtonConfiguration)
+                  .copyWith(color: event.color))
+              : component.copyWith())
+              .toList()));
+    } else if (event is UpdateButtonFontSizeEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ButtonConfiguration)
+                  .copyWith(
+                  fontSize: event.fontSize.isNotEmpty
+                      ? double.parse(event.fontSize)
+                      : 14,
+                  fontSizeValue: event.fontSize))
+              : component.copyWith())
+              .toList()));
+    } else if (event is UpdateButtonFontWeightEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration: (component.configuration
+              as wg.ButtonConfiguration)
+                  .copyWith(
+                  fontWeight: getFontWeightFromString(event.fontWeight)))
+              : component.copyWith())
+              .toList()));
+    } else if (event is UpdateButtonFontStyleEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ButtonConfiguration)
+                  .copyWith(fontStyle: event.fontStyle))
+              : component.copyWith())
+              .toList()));
+    } else if (event is UpdateButtonLetterSpacingEvent) {
+      emit(state.copyWith(
+          droppedComponents: state.droppedComponents
+              .map((component) =>
+          component.isSelected
+              ? component.copyWith(
+              configuration:
+              (component.configuration as wg.ButtonConfiguration)
+                  .copyWith(
+                  letterSpacing: event.letterSpacing.isNotEmpty
+                      ? double.parse(event.letterSpacing)
+                      : null,
+                  letterSpacingValue: event.letterSpacing))
+              : component.copyWith())
+              .toList()));
+    }
+  }
+
 
   FontWeight? getFontWeightFromString(String fontWeightString) {
     switch (fontWeightString.toLowerCase()) {

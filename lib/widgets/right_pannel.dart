@@ -24,16 +24,8 @@ class _RightPanelState extends State<RightPanel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF14181B),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: const Color(0xFF2E3741).withOpacity(0.8),
-          width: 1.2,
-        ),
-      ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +112,7 @@ class _RightPanelState extends State<RightPanel> {
                 style: TextStyle(fontSize: 14, color: Color(0xFF8E8E93))),
             const SizedBox(height: 10),
             ButtonStyling(
-              componentIndex: widget.index, configuration: selectedComponent?.configuration as TextConfiguration,
+              componentIndex: widget.index, configuration: selectedComponent!.configuration as wg.ButtonConfiguration,
             ),
             const SizedBox(height: 20),
           ],
