@@ -3,10 +3,10 @@ import 'dart:ui';
 import '../widgets/text_styling.dart';
 import 'logic_bloc.dart';
 
-class UpdateOpacityEvent extends UpdateButtonEvent {
+class UpdateButtonOpacityEvent extends UpdateButtonEvent {
   final double opacity;
 
-  UpdateOpacityEvent({required this.opacity});
+  UpdateButtonOpacityEvent({required this.opacity});
 }
 
 class UpdateButtonTextValueEvent extends UpdateButtonEvent {
